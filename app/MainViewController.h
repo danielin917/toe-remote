@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MainViewController.h
 //  toe-remote
 //
 //  Created by Nick Terrell on 2/20/16.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface MainViewController : UIViewController <UITextFieldDelegate>
 
 @end
-
