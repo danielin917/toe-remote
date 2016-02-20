@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "01A1B5B11C63A36700BDE528"
+               BlueprintIdentifier = "010374501C7914930072E604"
                BuildableName = "toe-remote.app"
                BlueprintName = "toe-remote"
                ReferencedContainer = "container:toe-remote.xcodeproj">
@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "01A1B5D01C63A36700BDE528"
+               BlueprintIdentifier = "010374691C7914930072E604"
                BuildableName = "toe-remoteTests.xctest"
                BlueprintName = "toe-remoteTests"
                ReferencedContainer = "container:toe-remote.xcodeproj">
@@ -42,7 +42,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "01A1B5DB1C63A36700BDE528"
+               BlueprintIdentifier = "010374741C7914930072E604"
                BuildableName = "toe-remoteUITests.xctest"
                BlueprintName = "toe-remoteUITests"
                ReferencedContainer = "container:toe-remote.xcodeproj">
@@ -52,7 +52,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "01A1B5B11C63A36700BDE528"
+            BlueprintIdentifier = "010374501C7914930072E604"
             BuildableName = "toe-remote.app"
             BlueprintName = "toe-remote"
             ReferencedContainer = "container:toe-remote.xcodeproj">
@@ -75,7 +75,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "01A1B5B11C63A36700BDE528"
+            BlueprintIdentifier = "010374501C7914930072E604"
             BuildableName = "toe-remote.app"
             BlueprintName = "toe-remote"
             ReferencedContainer = "container:toe-remote.xcodeproj">
@@ -94,7 +94,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "01A1B5B11C63A36700BDE528"
+            BlueprintIdentifier = "010374501C7914930072E604"
             BuildableName = "toe-remote.app"
             BlueprintName = "toe-remote"
             ReferencedContainer = "container:toe-remote.xcodeproj">

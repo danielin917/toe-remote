@@ -1,18 +1,18 @@
 //
-//  DataViewController.m
+//  ViewController.m
 //  toe-remote
 //
-//  Created by Nick Terrell on 2/4/16.
+//  Created by Nick Terrell on 2/20/16.
 //  Copyright © 2016 eecs481. All rights reserved.
 //
 
-#import "DataViewController.h"
+#import "ViewController.h"
 
-@interface DataViewController ()
+@interface ViewController ()
 
 @end
 
-@implementation DataViewController
+@implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -22,11 +22,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.dataLabel.text = [self.dataObject description];
 }
 
 @end
