@@ -14,6 +14,7 @@
 		0103746F1C7914930072E604 /* toe_remoteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0103746E1C7914930072E604 /* toe_remoteTests.m */; };
 		0103747A1C7914930072E604 /* toe_remoteUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 010374791C7914930072E604 /* toe_remoteUITests.m */; };
 		0103748C1C7918450072E604 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0103748B1C7918450072E604 /* MainViewController.m */; };
+		011A12B41C79499C0015540B /* BLE.m in Sources */ = {isa = PBXBuildFile; fileRef = 011A12B31C79499C0015540B /* BLE.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,8 @@
 		0103747B1C7914930072E604 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0103748A1C7918450072E604 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = ../MainViewController.h; sourceTree = "<group>"; };
 		0103748B1C7918450072E604 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = ../MainViewController.m; sourceTree = "<group>"; };
+		011A12B21C79499C0015540B /* BLE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLE.h; path = ../BLE/BLE.h; sourceTree = "<group>"; };
+		011A12B31C79499C0015540B /* BLE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BLE.m; path = ../BLE/BLE.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +117,8 @@
 		010374541C7914930072E604 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				011A12B21C79499C0015540B /* BLE.h */,
+				011A12B31C79499C0015540B /* BLE.m */,
 				010374551C7914930072E604 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -270,6 +275,7 @@
 				010374591C7914930072E604 /* AppDelegate.m in Sources */,
 				0103748C1C7918450072E604 /* MainViewController.m in Sources */,
 				010374561C7914930072E604 /* main.m in Sources */,
+				011A12B41C79499C0015540B /* BLE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,6 +499,7 @@
 				010374801C7914930072E604 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		010374811C7914930072E604 /* Build configuration list for PBXNativeTarget "toe-remoteTests" */ = {
 			isa = XCConfigurationList;
@@ -501,6 +508,7 @@
 				010374831C7914930072E604 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		010374841C7914930072E604 /* Build configuration list for PBXNativeTarget "toe-remoteUITests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +517,7 @@
 				010374861C7914930072E604 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

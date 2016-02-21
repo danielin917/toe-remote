@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BLE/BLE.h"
 
-@interface MainViewController : UIViewController <UITextFieldDelegate>
+@interface MainViewController : UIViewController <BLEDelegate> {
+    //BLE *bleShield;
+}
 
 @end
