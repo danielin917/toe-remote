@@ -2,7 +2,7 @@
 #include <SPI.h>
 #include <boards.h>
 #include <RBL_nRF8001.h>
-#include <services.h>
+#include <RBL_services.h>
 
 void setup() {
   // Default pins set to 9 and 8 for REQN and RDYN
