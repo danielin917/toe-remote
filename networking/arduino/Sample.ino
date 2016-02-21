@@ -16,7 +16,7 @@ void setup() {
   ble_begin();
   
   // Enable serial debug
-  // Serial.begin(57600);
+  Serial.begin(57600);
 }
 
 void loop() {
@@ -26,11 +26,15 @@ void loop() {
     byte data = ble_read();
 
     if (data == 0x00) {
+      Serial.write('0');
       // Do something
-    }
-    else if (data == 0x01) {
+    } else if (data == 0x01) {
+      Serial.write('1');
       // Do something else
+    } else {
+      Serial.write('f');
     }
+    Serial.println();
   }
   // Allow BLE Shield to send/receive data
   ble_do_events();  
