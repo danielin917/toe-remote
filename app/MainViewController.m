@@ -28,7 +28,7 @@
     
     // Set up the connect button
     self.connectButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.connectButton.frame = CGRectMake(110.0f, 200.0f, 100.0f, 30.0f);
+    self.connectButton.frame = CGRectMake(110.0f, 50.0f, 100.0f, 30.0f);
     [self.connectButton addTarget:self
                 action:@selector(connectButtonPressed)
       forControlEvents:UIControlEventTouchUpInside];
@@ -37,7 +37,7 @@
     
     // Set up the on button
     self.onButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.onButton.frame = CGRectMake(110.0f, 200.0f, 100.0f, 30.0f);
+    self.onButton.frame = CGRectMake(110.0f, 150.0f, 100.0f, 30.0f);
     [self.onButton addTarget:self
             action:@selector(onButtonPressed)
             forControlEvents:UIControlEventTouchUpInside];
@@ -47,7 +47,7 @@
     
     // Set up the off button
     self.offButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.offButton.frame = CGRectMake(55.0f, 200.0f, 100.0f, 30.0f);
+    self.offButton.frame = CGRectMake(55.0f, 250.0f, 100.0f, 30.0f);
     [self.offButton addTarget:self
                action:@selector(offButtonPressed)
      forControlEvents:UIControlEventTouchUpInside];
@@ -60,13 +60,13 @@
 
 - (void)onButtonPressed {
     UInt8 buf[1] = {0x01};
-    NSData *data = [[NSData alloc] initWithBytes:buf length:3];
+    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
     [self.bleShield write:data];
 }
 
 - (void)offButtonPressed {
     UInt8 buf[1] = {0x00};
-    NSData *data = [[NSData alloc] initWithBytes:buf length:3];
+    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
     [self.bleShield write:data];
 }
 
@@ -83,12 +83,12 @@
         self.bleShield.peripherals = nil;
     }
     
-    // Search for peripherals with a 5 second timeout.
-    [self.bleShield findBLEPeripherals:5];
+    // Search for peripherals with a 2 second timeout.
+    [self.bleShield findBLEPeripherals:2];
     
     // Call a handler when the interval has elapsed.
     [NSTimer
-     scheduledTimerWithTimeInterval:(float)5.0
+     scheduledTimerWithTimeInterval:(float)2.0
      target:self
      selector:@selector(connectionTimer:)
      userInfo:nil
