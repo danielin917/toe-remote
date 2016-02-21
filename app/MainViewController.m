@@ -11,11 +11,16 @@
 
 @property (nonatomic, strong) BLE *ble;
 
+@property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIView *titleView;
 
 @property (nonatomic, strong) UIButton *connectButton;
-@property (nonatomic, strong) UIButton *onButton;
-@property (nonatomic, strong) UIButton *offButton;
+
+@property (nonatomic, strong) UIButton *randomButton;
+@property (nonatomic, strong) UIButton *redButton;
+@property (nonatomic, strong) UIButton *yellowButton;
+@property (nonatomic, strong) UIButton *greenButton;
+@property (nonatomic, strong) UIButton *blueButton;
 
 @end
 
@@ -54,37 +59,98 @@
         [self.titleView addSubview:self.connectButton];
     }
     
-    // Set up the on button
-    self.onButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.onButton.frame = CGRectMake(110.0f, 150.0f, 100.0f, 30.0f);
-    [self.onButton addTarget:self
-            action:@selector(onButtonPressed)
-            forControlEvents:UIControlEventTouchUpInside];
-    [self.onButton setTitle:@"On" forState:UIControlStateNormal];
-    self.onButton.hidden = true;
-    [self.view addSubview:self.onButton];
-    
-    // Set up the off button
-    self.offButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.offButton.frame = CGRectMake(55.0f, 250.0f, 100.0f, 30.0f);
-    [self.offButton addTarget:self
-               action:@selector(offButtonPressed)
-     forControlEvents:UIControlEventTouchUpInside];
-    [self.offButton setTitle:@"Off" forState:UIControlStateNormal];
-    self.offButton.hidden = true;
-    [self.view addSubview:self.offButton];
+    {
+        // Set up the main view
+        self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, self.view.bounds.size.height/10.0f, self.view.bounds.size.width, self.view.bounds.size.height - self.view.bounds.size.height/10.0f)];
+        [self.view addSubview:self.mainView];
+        
+        // Set up the random button
+        {
+            UIButton *button = self.randomButton;
+            button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            button.frame = CGRectMake(0.0f, 0.0f, 100.0f, 30.0f);
+            [button addTarget:self
+                              action:@selector(randomButtonPressed)
+                    forControlEvents:UIControlEventTouchUpInside];
+            [button setTitle:@"Random" forState:UIControlStateNormal];
+            button.hidden = true;
+            [self.mainView addSubview:button];
+        }
+        {
+            UIButton *button = self.redButton;
+            button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            button.frame = CGRectMake(0.0f, 50.0f, 100.0f, 30.0f);
+            [button addTarget:self
+                       action:@selector(redButtonPressed)
+             forControlEvents:UIControlEventTouchUpInside];
+            [button setTitle:@"Red" forState:UIControlStateNormal];
+            button.hidden = true;
+            [self.mainView addSubview:button];
+        }
+        {
+            UIButton *button = self.yellowButton;
+            button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            button.frame = CGRectMake(0.0f, 100.0f, 100.0f, 30.0f);
+            [button addTarget:self
+                       action:@selector(yellowButtonPressed)
+             forControlEvents:UIControlEventTouchUpInside];
+            [button setTitle:@"Yellow" forState:UIControlStateNormal];
+            button.hidden = true;
+            [self.mainView addSubview:button];
+        }
+        {
+            UIButton *button = self.greenButton;
+            button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            button.frame = CGRectMake(0.0f, 150.0f, 100.0f, 30.0f);
+            [button addTarget:self
+                       action:@selector(greenButtonPressed)
+             forControlEvents:UIControlEventTouchUpInside];
+            [button setTitle:@"Green" forState:UIControlStateNormal];
+            button.hidden = true;
+            [self.mainView addSubview:button];
+        }
+        {
+            UIButton *button = self.blueButton;
+            button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            button.frame = CGRectMake(0.0f, 200.0f, 100.0f, 30.0f);
+            [button addTarget:self
+                       action:@selector(blueButtonPressed)
+             forControlEvents:UIControlEventTouchUpInside];
+            [button setTitle:@"Blue" forState:UIControlStateNormal];
+            button.hidden = true;
+            [self.mainView addSubview:button];
+        }
+    }
 }
 
 #pragma mark - Button Actions
 
-- (void)onButtonPressed {
+- (void)randomButtonPressed {
+    UInt8 buf[1] = {0x00};
+    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    [self.ble write:data];
+}
+
+- (void)redButtonPressed {
     UInt8 buf[1] = {0x01};
     NSData *data = [[NSData alloc] initWithBytes:buf length:1];
     [self.ble write:data];
 }
 
-- (void)offButtonPressed {
-    UInt8 buf[1] = {0x00};
+- (void)yellowButtonPressed {
+    UInt8 buf[1] = {0x02};
+    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    [self.ble write:data];
+}
+
+- (void)greenButtonPressed {
+    UInt8 buf[1] = {0x03};
+    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    [self.ble write:data];
+}
+
+- (void)blueButtonPressed {
+    UInt8 buf[1] = {0x04};
     NSData *data = [[NSData alloc] initWithBytes:buf length:1];
     [self.ble write:data];
 }
@@ -155,14 +221,23 @@
 
 - (void) bleDidDisconnect {
     [self.connectButton setTitle:@"Connect" forState:UIControlStateNormal];
-    self.onButton.hidden = true;
-    self.offButton.hidden = true;
+    
+    self.randomButton.hidden = true;
+    self.redButton.hidden = true;
+    self.yellowButton.hidden = true;
+    self.greenButton.hidden = true;
+    self.blueButton.hidden = true;
+
 }
 
 -(void) bleDidConnect {
     [self.connectButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-    self.onButton.hidden = false;
-    self.offButton.hidden = false;
+    
+    self.randomButton.hidden = false;
+    self.redButton.hidden = false;
+    self.yellowButton.hidden = false;
+    self.greenButton.hidden = false;
+    self.blueButton.hidden = false;
 }
 
 - (void)didReceiveMemoryWarning {
