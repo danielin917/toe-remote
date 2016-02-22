@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BLE/BLE.h"
+#import "BLE.h"
+#import "SelectionViewController.h"
 
-@interface MainViewController : UIViewController <BLEDelegate> {
-    //BLE *bleShield;
-}
+@interface MainViewController : UIViewController <BLEDelegate, SelectionViewControllerDelegate>
 
 @end
