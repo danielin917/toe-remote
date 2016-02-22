@@ -89,7 +89,7 @@ bool ServerInterface::process_command(){
 bool ServerInterface::call_function(unsigned char cmd)
 {
 	int index = (int)cmd;
-	array[index]();		
+	function_map[index]();		
 	return true;
 }  
 
