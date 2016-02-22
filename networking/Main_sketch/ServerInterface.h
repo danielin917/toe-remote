@@ -2,6 +2,9 @@
 #include "lib.h"
 #include <Arduino.h>
 
+/*
+ *button functions defined as function pointers
+ */
 typedef void (*button_func)();
 
 /*
@@ -25,39 +28,47 @@ struct Button{
 };
 
 class ServerInterface {
-public:
-  
-	//STORAGE FOR BUTTONS
+ 	//Broadcast Name 
+	char* device_name;	
+	//Storage for Buttons
 	Vector<Button*> btn_vec;
-	//MAPPINNG FROM INDEX TO FUNCTION
+	//Mapping from Index to Function
 	Vector<button_func> function_map;		  
+/*
+ *Uses the function mapping to button command
+ */
+	bool call_function(unsigned char cmd);
+public:
 	
 //////////////////////SETTINGS//////////////////////////////////
 /*
  *Create and store new button
- *RETURNS: 1 on success
+ *RETURNS: Button id for function on success, -1 on failure
  */
 	int create_button(int size_x, int size_y, int grid_x, int grid_y, char* text, button_func func);		
-
-  
+/*
+ *Sets the broadcast name for your device. Name can only be 10 characters long and default is toe-device. RETURNS true on success
+ */
+	bool set_device_name(const char* name); 
+ 
 //////////////////////INTERFACE/////////////////////////////////
  /**
-   * Constructs the object and starts the server
+   * Constructs the object
    */
-  ServerInterface(){}
+  ServerInterface();
   /**
    * Starts the server
    */
-  bool startServer(/* parameters */);
+  bool start_server(/* parameters */);
   /**
-   * Stops the server
+   * Resets server with specified pin. TODO what doess that mean??
    */
-  bool stopServer();
+  bool reset_server(uint8_t reset_pin);
 
   /**
    * In the case of a single threaded
    */ 
-  bool process(); 
+  bool process_command(); 
 
   /**
    * Stops the server if its running and destroys the object

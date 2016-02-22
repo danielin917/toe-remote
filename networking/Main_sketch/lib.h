@@ -34,5 +34,9 @@ public:
 	size_t size()
 	{
 		return count;
-	}			
+	}
+	T operator[](int x)
+	{
+		return array[x];
+	}	
 };
