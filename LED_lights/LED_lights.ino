@@ -87,13 +87,13 @@ void loop()
     } else if (color == ColorBtn::RED) {
       digitalWrite(ledPins[0], HIGH);
       digitalWrite(ledPins[6], HIGH);
-    } else if (color == ColorBtn::RED) {
+    } else if (color == ColorBtn::YELLOW) {
       digitalWrite(ledPins[1], HIGH);
       digitalWrite(ledPins[5], HIGH);
-    } else if (color == ColorBtn::RED) {
+    } else if (color == ColorBtn::GREEN) {
       digitalWrite(ledPins[2], HIGH);
-      digitalWrite(ledPins[], HIGH);
-    } else if (color == ColorBtn::RED) {
+      digitalWrite(ledPins[4], HIGH);
+    } else if (color == ColorBtn::BLUE) {
       digitalWrite(ledPins[0], HIGH);
     }
     ble_do_events(); 
