@@ -47,4 +47,9 @@ public:
 		*/
 		return array[x];
 	}	
+	~Vector()
+	{
+		 if(array)
+			 delete[] array;
+	}
 };
