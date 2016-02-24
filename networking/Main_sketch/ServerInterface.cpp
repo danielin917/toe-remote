@@ -26,7 +26,7 @@ ServerInterface::ServerInterface():device_name(NULL){}
 
 ServerInterface::~ServerInterface(){}
 
-int ServerInterface::create_button(int size_x, int size_y, int grid_x, int grid_y, char* text, button_func func)
+int ServerInterface::create_button(unsigned char size_x, unsigned char size_y, unsigned char grid_x, unsigned char grid_y, char* text, button_func func)
 {	
 	if(btn_vec.size() == 16)
 	{
@@ -88,8 +88,7 @@ bool ServerInterface::process_command(){
 
 bool ServerInterface::call_function(unsigned char cmd)
 {
-	int index = (int)cmd;
-	function_map[index]();		
+	function_map[cmd]();		
 	return true;
 }  
 

@@ -12,14 +12,14 @@ typedef void (*button_func)();
  */
 struct Button{
 	static int next_id;
-	int id;
-	int size_x;
-	int size_y;
-	int grid_x;
-	int grid_y;
+	unsigned char id;
+	unsigned char size_x;
+	unsigned char size_y;
+	unsigned char grid_x;
+	unsigned char grid_y;
 	char* text;
 	
-	Button(int _size_x, int _size_y, int _grid_x, int _grid_y, char* _text)
+	Button(unsigned char _size_x, unsigned char _size_y, unsigned char _grid_x, unsigned char _grid_y, char* _text)
 	:size_x(_size_x), size_y(_size_y), grid_x(_grid_x), grid_y(_grid_y){
 		char * buf = new char[50];
 		strncpy(buf, _text, 50);
