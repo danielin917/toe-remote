@@ -45,7 +45,7 @@ public:
  *Create and store new button
  *RETURNS: Button id for function on success, -1 on failure
  */
-	int create_button(int size_x, int size_y, int grid_x, int grid_y, char* text, button_func func);		
+	int create_button(unsigned char size_x, unsigned char size_y, unsigned char grid_x, unsigned char grid_y, char* text, button_func func);		
 /*
  *Sets the broadcast name for your device. Name can only be 10 characters long and default is toe-device. RETURNS true on success
  */
