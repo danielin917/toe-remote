@@ -46,7 +46,7 @@ void loop()
   
   // If data is ready
   while(ble_available()) {
-    for(index = 0; index <= 7; index++)
+    for(index = 0; index <= 6; index++)
     {
       digitalWrite(ledPins[index], LOW);   // turn LED off
     }
@@ -60,13 +60,13 @@ void loop()
       Serial.write('1');
       color = ColorBtn::RED;
     } else if (data == 0x02) {
-      Serial.write(data);
+      Serial.write('2');
       color = ColorBtn::YELLOW;
     } else if (data == 0x03) {
-      Serial.write(data);
+      Serial.write('3');
       color = ColorBtn::GREEN;
     } else if (data == 0x04) {
-      Serial.write(data);
+      Serial.write('4');
       color = ColorBtn::BLUE;
     } else {
       Serial.write(data);
@@ -87,14 +87,14 @@ void loop()
     } else if (color == ColorBtn::RED) {
       digitalWrite(ledPins[0], HIGH);
       digitalWrite(ledPins[6], HIGH);
-    } else if (color == ColorBtn::RED) {
+    } else if (color == ColorBtn::YELLOW) {
       digitalWrite(ledPins[1], HIGH);
       digitalWrite(ledPins[5], HIGH);
-    } else if (color == ColorBtn::RED) {
+    } else if (color == ColorBtn::GREEN) {
       digitalWrite(ledPins[2], HIGH);
-      digitalWrite(ledPins[], HIGH);
-    } else if (color == ColorBtn::RED) {
-      digitalWrite(ledPins[0], HIGH);
+      digitalWrite(ledPins[4], HIGH);
+    } else if (color == ColorBtn::BLUE) {
+      digitalWrite(ledPins[3], HIGH);
     }
     ble_do_events(); 
   }

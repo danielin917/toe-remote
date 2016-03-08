@@ -1,5 +1,7 @@
 #pragma once
 #include<Arduino.h>
+//#include <stdlib.h>
+//#include <string.h>
 template<typename T>
 class Vector{
 	T* array;
@@ -29,10 +31,25 @@ public:
 	}
 	void pop_back()
 	{
-		
+		count -= 1;	
 	}
 	size_t size()
 	{
 		return count;
-	}			
+	}
+	T operator[](int x)
+	{
+		/*some sort of bounds check
+		if(x >= count)
+		{
+			throw;
+		}
+		*/
+		return array[x];
+	}	
+	~Vector()
+	{
+		 if(array)
+			 delete[] array;
+	}
 };
