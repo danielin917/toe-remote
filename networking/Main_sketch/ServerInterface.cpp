@@ -48,6 +48,7 @@ bool ServerInterface::start_server(/* parameters */){
 	if(!device_name)
 		strncpy(device_name,"toe-device",10);
 	
+	ble_set_name(device_name);	
 	ble_begin();
 	return true;
 }
@@ -66,16 +67,17 @@ bool ServerInterface::process_command(){
 		if(ble_available() >= 2)/*only read if we have a full package*/
 		{
 			unsigned char cmd;
-			unsigned char data;
+			unsigned char func_index;
 			cmd = (unsigned char)ble_read();	 
-			data = (unsigned char)ble_read();	
+			func_index = (unsigned char)ble_read();	
 			switch(cmd)
 			{	
 				case 0x00:
 					/* do response for layout */	
+					send_layout();
 					break;
 				case 0x01:
-					call_function(data);	
+					call_function(func_index);	
 					break;
 				default:
 					break;
@@ -86,10 +88,14 @@ bool ServerInterface::process_command(){
 	return false;	
 }
 
-bool ServerInterface::call_function(unsigned char cmd)
+bool ServerInterface::call_function(unsigned char func_index)
 {
-	function_map[cmd]();		
+	function_map[func_index]();		
 	return true;
 }  
 
-
+bool ServerInterface::send_layout()
+{
+	
+	return true;
+}
