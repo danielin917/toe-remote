@@ -35,9 +35,13 @@ class ServerInterface {
 	//Mapping from Index to Function
 	Vector<button_func> function_map;		  
 /*
+ *Send layout of buttons
+ */
+	bool send_layout();
+/*
  *Uses the function mapping to button command
  */
-	bool call_function(unsigned char cmd);
+	bool call_function(unsigned char func_index);
 public:
 	
 //////////////////////SETTINGS//////////////////////////////////
