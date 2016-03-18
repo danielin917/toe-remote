@@ -1,0 +1,252 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		014C638C1C9A6DDA00EDA26B /* apple_peripheral.h in Headers */ = {isa = PBXBuildFile; fileRef = 014C638B1C9A6DDA00EDA26B /* apple_peripheral.h */; };
+		014C638E1C9A6DDA00EDA26B /* apple_peripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = 014C638D1C9A6DDA00EDA26B /* apple_peripheral.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		014C63881C9A6DDA00EDA26B /* libapple-peripheral.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libapple-peripheral.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
+		014C638B1C9A6DDA00EDA26B /* apple_peripheral.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = apple_peripheral.h; sourceTree = "<group>"; };
+		014C638D1C9A6DDA00EDA26B /* apple_peripheral.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = apple_peripheral.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		014C63851C9A6DDA00EDA26B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		014C637F1C9A6DDA00EDA26B = {
+			isa = PBXGroup;
+			children = (
+				014C638A1C9A6DDA00EDA26B /* apple-peripheral */,
+				014C63891C9A6DDA00EDA26B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		014C63891C9A6DDA00EDA26B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				014C63881C9A6DDA00EDA26B /* libapple-peripheral.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		014C638A1C9A6DDA00EDA26B /* apple-peripheral */ = {
+			isa = PBXGroup;
+			children = (
+				014C638B1C9A6DDA00EDA26B /* apple_peripheral.h */,
+				014C638D1C9A6DDA00EDA26B /* apple_peripheral.m */,
+			);
+			path = "apple-peripheral";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		014C63861C9A6DDA00EDA26B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				014C638C1C9A6DDA00EDA26B /* apple_peripheral.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		014C63871C9A6DDA00EDA26B /* apple-peripheral */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 014C63911C9A6DDA00EDA26B /* Build configuration list for PBXNativeTarget "apple-peripheral" */;
+			buildPhases = (
+				014C63841C9A6DDA00EDA26B /* Sources */,
+				014C63851C9A6DDA00EDA26B /* Frameworks */,
+				014C63861C9A6DDA00EDA26B /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "apple-peripheral";
+			productName = "apple-peripheral";
+			productReference = 014C63881C9A6DDA00EDA26B /* libapple-peripheral.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		014C63801C9A6DDA00EDA26B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = eecs481;
+				TargetAttributes = {
+					014C63871C9A6DDA00EDA26B = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 014C63831C9A6DDA00EDA26B /* Build configuration list for PBXProject "apple-peripheral" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 014C637F1C9A6DDA00EDA26B;
+			productRefGroup = 014C63891C9A6DDA00EDA26B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				014C63871C9A6DDA00EDA26B /* apple-peripheral */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		014C63841C9A6DDA00EDA26B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				014C638E1C9A6DDA00EDA26B /* apple_peripheral.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		014C638F1C9A6DDA00EDA26B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		014C63901C9A6DDA00EDA26B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		014C63921C9A6DDA00EDA26B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		014C63931C9A6DDA00EDA26B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		014C63831C9A6DDA00EDA26B /* Build configuration list for PBXProject "apple-peripheral" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				014C638F1C9A6DDA00EDA26B /* Debug */,
+				014C63901C9A6DDA00EDA26B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		014C63911C9A6DDA00EDA26B /* Build configuration list for PBXNativeTarget "apple-peripheral" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				014C63921C9A6DDA00EDA26B /* Debug */,
+				014C63931C9A6DDA00EDA26B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 014C63801C9A6DDA00EDA26B /* Project object */;
+}
