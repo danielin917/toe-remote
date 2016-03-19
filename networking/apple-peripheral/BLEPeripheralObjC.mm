@@ -1,5 +1,7 @@
-#import "BLEPeripheralObjC.h"
 #import "BLEPeripheral.h"
+
+#import <Foundation/Foundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
 #define RBL_SERVICE_UUID                         "713D0000-503E-4C75-BA94-3148F18D941E"
 #define RBL_CHAR_TX_UUID                         "713D0002-503E-4C75-BA94-3148F18D941E"
@@ -7,20 +9,24 @@
 
 static NSInteger MAX_CHUNK_SIZE = 64;
 
-@interface BLEPeripheralImpl()
+@interface BLEPeripheralImpl : NSObject <CBPeripheralManagerDelegate>
 
 @property (strong, nonatomic) CBPeripheralManager *peripheralManager;
 @property (strong, nonatomic) CBMutableCharacteristic *writeCharacteristic;
 @property (strong, nonatomic) CBMutableCharacteristic *readCharacteristic;
 @property (strong, nonatomic) NSMutableData *dataToSend;
+@property (strong, nonatomic) NSMutableData *readBuffer;
 @property (strong, nonatomic) NSString *serviceName;
 
+@property (nonatomic, readwrite) NSUInteger readBufferIndex;
 @property (nonatomic, readwrite) NSUInteger sendDataIndex;
 @property (nonatomic, readwrite) NSUInteger numReadSubscribers;
 @property (nonatomic, readwrite) NSUInteger numWriteSubscribers;
 
 
 - (void) send;
+- (void) write:(NSData *)data;
+- (bool) connected;
 
 @end
 
@@ -30,7 +36,7 @@ BLEPeripheral::BLEPeripheral(const char *name) : impl((__bridge_retained void*)[
 
 BLEPeripheral::~BLEPeripheral() {
     NSLog(@"Destroyed");
-    (__bridge_transfer id)impl;
+    (__bridge_transfer BLEPeripheralImpl*)impl;
 }
 
 void BLEPeripheral::write_byte(unsigned char data) {
@@ -38,21 +44,29 @@ void BLEPeripheral::write_byte(unsigned char data) {
 }
 
 void BLEPeripheral::write(const unsigned char *data, unsigned char len) {
-    [(__bridge id)impl write: [NSData dataWithBytes:data length:len]];
+    [(__bridge BLEPeripheralImpl*)impl write: [NSData dataWithBytes:data length:len]];
 }
 
 void BLEPeripheral::process() {}
 
 unsigned char BLEPeripheral::read_byte() {
-    return 0;
+    BLEPeripheralImpl *p = (__bridge BLEPeripheralImpl*)impl;
+    assert(p.readBuffer.length > p.readBufferIndex);
+    unsigned char byte = ((unsigned char*)p.readBuffer.mutableBytes)[p.readBufferIndex++];
+    if (p.readBuffer.length == p.readBufferIndex) {
+        [p.readBuffer setLength:0];
+        p.readBufferIndex = 0;
+    }
+    return byte;
 }
 
 unsigned char BLEPeripheral::bytes_available() {
-    return 0;
+    BLEPeripheralImpl *p = (__bridge BLEPeripheralImpl*)impl;
+    return p.readBuffer.length - p.readBufferIndex;
 }
 
 bool BLEPeripheral::connected() {
-    return [((__bridge id)impl) connected];
+    return [((__bridge BLEPeripheralImpl*)impl) connected];
 }
 
 - (id) init:(const char *) name {
@@ -62,7 +76,9 @@ bool BLEPeripheral::connected() {
         self.numReadSubscribers = 0;
         self.numWriteSubscribers = 0;
         self.sendDataIndex = 0;
+        self.readBufferIndex = 0;
         self.dataToSend = [[NSMutableData alloc] init];
+        self.readBuffer = [[NSMutableData alloc] init];
         self.serviceName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
         
         self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
@@ -76,8 +92,8 @@ bool BLEPeripheral::connected() {
         return;
     }
     NSLog(@"Adding service");
-    self.readCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:@RBL_CHAR_RX_UUID] properties:CBCharacteristicPropertyRead value:nil permissions:CBAttributePermissionsWriteable];
-    self.writeCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:@RBL_CHAR_TX_UUID] properties:CBCharacteristicPropertyWriteWithoutResponse|CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
+    self.readCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:@RBL_CHAR_RX_UUID] properties:CBCharacteristicPropertyWriteWithoutResponse value:nil permissions:CBAttributePermissionsWriteable];
+    self.writeCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:@RBL_CHAR_TX_UUID] properties:CBCharacteristicPropertyRead|CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
     
     CBMutableService *service = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:@RBL_SERVICE_UUID] primary:YES];
     service.characteristics = @[self.readCharacteristic, self.writeCharacteristic];
@@ -132,9 +148,29 @@ bool BLEPeripheral::connected() {
     [self send];
 }
 
+- (void) peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral {
+    if (self.sendDataIndex < self.dataToSend.length) {
+        [self send];
+    }
+}
+
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveReadRequest:(CBATTRequest *)request {
+    NSLog(@"[DEBUG] Recieved read requests");
+}
+
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests {
+    NSLog(@"[DEBUG] Recieved write requests");
+    if (requests.count == 0) {
+        return;
+    }
+    for (CBATTRequest *request in requests) {
+        [self.readBuffer appendData:request.value];
+    }
+    [peripheral respondToRequest:requests[0] withResult:CBATTErrorSuccess];
+}
+
 - (bool) connected {
-    // return true;
-    return self.numWriteSubscribers > 0 && self.numReadSubscribers > 0;
+    return self.numWriteSubscribers > 0;
 }
 
 - (void)send {
@@ -151,12 +187,6 @@ bool BLEPeripheral::connected() {
         NSString *stringFromData = [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding];
         NSLog(@"Sent: %@", stringFromData);
         self.sendDataIndex += length;
-    }
-}
-
-- (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral {
-    if (self.sendDataIndex < self.dataToSend.length) {
-        [self send];
     }
 }
 
