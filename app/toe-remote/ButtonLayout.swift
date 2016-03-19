@@ -2,9 +2,7 @@
 //  ButtonLayout.swift
 //  toe-remote
 //
-//  Created by Nick Terrell on 3/19/16.
-//  Copyright © 2016 eecs481. All rights reserved.
-//
+
 
 import Foundation
 import UIKit
