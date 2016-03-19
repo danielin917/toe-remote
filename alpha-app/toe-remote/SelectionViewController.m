@@ -53,8 +53,8 @@
     // Set text
     CBPeripheral *p = [self.data objectAtIndex: indexPath.row];
     NSString *text = @"NULL";
-    if (p.identifier.UUIDString != NULL) {
-        text = p.identifier.UUIDString;
+    if (p.name != NULL) {
+        text = p.name;
     }
     cell.textLabel.text = text;
     

@@ -15,6 +15,7 @@
 		0103747A1C7914930072E604 /* toe_remoteUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 010374791C7914930072E604 /* toe_remoteUITests.m */; };
 		0103748C1C7918450072E604 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0103748B1C7918450072E604 /* MainViewController.m */; };
 		011A12B41C79499C0015540B /* BLE.m in Sources */ = {isa = PBXBuildFile; fileRef = 011A12B31C79499C0015540B /* BLE.m */; };
+		0172220A1C7A6C7F001913A9 /* SelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 017222091C7A6C7F001913A9 /* SelectionViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,8 @@
 		0103748B1C7918450072E604 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = ../MainViewController.m; sourceTree = "<group>"; };
 		011A12B21C79499C0015540B /* BLE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLE.h; path = ../BLE/BLE.h; sourceTree = "<group>"; };
 		011A12B31C79499C0015540B /* BLE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BLE.m; path = ../BLE/BLE.m; sourceTree = "<group>"; };
+		017222081C7A6C7F001913A9 /* SelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionViewController.h; sourceTree = "<group>"; };
+		017222091C7A6C7F001913A9 /* SelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +109,8 @@
 				010374581C7914930072E604 /* AppDelegate.m */,
 				0103748A1C7918450072E604 /* MainViewController.h */,
 				0103748B1C7918450072E604 /* MainViewController.m */,
+				017222081C7A6C7F001913A9 /* SelectionViewController.h */,
+				017222091C7A6C7F001913A9 /* SelectionViewController.m */,
 				010374601C7914930072E604 /* Assets.xcassets */,
 				010374621C7914930072E604 /* LaunchScreen.storyboard */,
 				010374651C7914930072E604 /* Info.plist */,
@@ -272,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0172220A1C7A6C7F001913A9 /* SelectionViewController.m in Sources */,
 				010374591C7914930072E604 /* AppDelegate.m in Sources */,
 				0103748C1C7918450072E604 /* MainViewController.m in Sources */,
 				010374561C7914930072E604 /* main.m in Sources */,
