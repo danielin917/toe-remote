@@ -2,11 +2,12 @@
 
 class BLEPeripheral {
 public:
-  BLEPeripheral();
+  BLEPeripheral(const char *name);
+  ~BLEPeripheral();
 
   void write_byte(unsigned char data);
 
-  void write(unsigned char *data, unsigned char len);
+  void write(const unsigned char *data, unsigned char len);
 
   void process();
 
@@ -15,4 +16,7 @@ public:
   unsigned char bytes_available();
 
   bool connected();
+
+private:
+    void *impl;
 };

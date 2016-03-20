@@ -1,9 +1,8 @@
 #include "BLEPeripheral.h"
 
-#include <RBL_services.h>
 #include <RBL_nRF8001.h>
 
-BLEPeripheral::BLEPeripheral(const char *name) {
+BLEPeripheral::BLEPeripheral(const char *name) : impl(nullptr) {
   ble_set_name(name);
   ble_begin();
 }
