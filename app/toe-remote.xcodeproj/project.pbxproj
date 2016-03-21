@@ -7,69 +7,68 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		010374561C7914930072E604 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 010374551C7914930072E604 /* main.m */; };
-		010374591C7914930072E604 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 010374581C7914930072E604 /* AppDelegate.m */; };
-		010374611C7914930072E604 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 010374601C7914930072E604 /* Assets.xcassets */; };
-		010374641C7914930072E604 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 010374621C7914930072E604 /* LaunchScreen.storyboard */; };
-		0103746F1C7914930072E604 /* toe_remoteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0103746E1C7914930072E604 /* toe_remoteTests.m */; };
-		0103747A1C7914930072E604 /* toe_remoteUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 010374791C7914930072E604 /* toe_remoteUITests.m */; };
-		0103748C1C7918450072E604 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0103748B1C7918450072E604 /* MainViewController.m */; };
-		011A12B41C79499C0015540B /* BLE.m in Sources */ = {isa = PBXBuildFile; fileRef = 011A12B31C79499C0015540B /* BLE.m */; };
+		014C634C1C9A49FB00EDA26B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C634B1C9A49FB00EDA26B /* AppDelegate.swift */; };
+		014C634E1C9A49FB00EDA26B /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C634D1C9A49FB00EDA26B /* SelectionViewController.swift */; };
+		014C63531C9A49FB00EDA26B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 014C63521C9A49FB00EDA26B /* Assets.xcassets */; };
+		014C63561C9A49FB00EDA26B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 014C63541C9A49FB00EDA26B /* LaunchScreen.storyboard */; };
+		014C63611C9A49FC00EDA26B /* toe_remoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C63601C9A49FC00EDA26B /* toe_remoteTests.swift */; };
+		014C636C1C9A49FC00EDA26B /* toe_remoteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C636B1C9A49FC00EDA26B /* toe_remoteUITests.swift */; };
+		014C637A1C9A504B00EDA26B /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C63791C9A504B00EDA26B /* DeviceViewController.swift */; };
+		014C637E1C9A515400EDA26B /* BLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C637D1C9A515400EDA26B /* BLE.swift */; };
+		014C64351C9DCE0900EDA26B /* ButtonLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C64341C9DCE0900EDA26B /* ButtonLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0103746B1C7914930072E604 /* PBXContainerItemProxy */ = {
+		014C635D1C9A49FC00EDA26B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 010374491C7914930072E604 /* Project object */;
+			containerPortal = 014C63401C9A49FB00EDA26B /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 010374501C7914930072E604;
+			remoteGlobalIDString = 014C63471C9A49FB00EDA26B;
 			remoteInfo = "toe-remote";
 		};
-		010374761C7914930072E604 /* PBXContainerItemProxy */ = {
+		014C63681C9A49FC00EDA26B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 010374491C7914930072E604 /* Project object */;
+			containerPortal = 014C63401C9A49FB00EDA26B /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 010374501C7914930072E604;
+			remoteGlobalIDString = 014C63471C9A49FB00EDA26B;
 			remoteInfo = "toe-remote";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		010374511C7914930072E604 /* toe-remote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "toe-remote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		010374551C7914930072E604 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		010374571C7914930072E604 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		010374581C7914930072E604 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		010374601C7914930072E604 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		010374631C7914930072E604 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		010374651C7914930072E604 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0103746A1C7914930072E604 /* toe-remoteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "toe-remoteTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0103746E1C7914930072E604 /* toe_remoteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = toe_remoteTests.m; sourceTree = "<group>"; };
-		010374701C7914930072E604 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		010374751C7914930072E604 /* toe-remoteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "toe-remoteUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		010374791C7914930072E604 /* toe_remoteUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = toe_remoteUITests.m; sourceTree = "<group>"; };
-		0103747B1C7914930072E604 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0103748A1C7918450072E604 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = ../MainViewController.h; sourceTree = "<group>"; };
-		0103748B1C7918450072E604 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = ../MainViewController.m; sourceTree = "<group>"; };
-		011A12B21C79499C0015540B /* BLE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLE.h; path = ../BLE/BLE.h; sourceTree = "<group>"; };
-		011A12B31C79499C0015540B /* BLE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BLE.m; path = ../BLE/BLE.m; sourceTree = "<group>"; };
+		014C63481C9A49FB00EDA26B /* toe-remote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "toe-remote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		014C634B1C9A49FB00EDA26B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		014C634D1C9A49FB00EDA26B /* SelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; };
+		014C63521C9A49FB00EDA26B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		014C63551C9A49FB00EDA26B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		014C63571C9A49FB00EDA26B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		014C635C1C9A49FC00EDA26B /* toe-remoteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "toe-remoteTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		014C63601C9A49FC00EDA26B /* toe_remoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toe_remoteTests.swift; sourceTree = "<group>"; };
+		014C63621C9A49FC00EDA26B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		014C63671C9A49FC00EDA26B /* toe-remoteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "toe-remoteUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		014C636B1C9A49FC00EDA26B /* toe_remoteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toe_remoteUITests.swift; sourceTree = "<group>"; };
+		014C636D1C9A49FC00EDA26B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		014C63791C9A504B00EDA26B /* DeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceViewController.swift; sourceTree = "<group>"; };
+		014C637D1C9A515400EDA26B /* BLE.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLE.swift; sourceTree = "<group>"; };
+		014C64341C9DCE0900EDA26B /* ButtonLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0103744E1C7914930072E604 /* Frameworks */ = {
+		014C63451C9A49FB00EDA26B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		010374671C7914930072E604 /* Frameworks */ = {
+		014C63591C9A49FC00EDA26B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		010374721C7914930072E604 /* Frameworks */ = {
+		014C63641C9A49FC00EDA26B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -79,65 +78,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		010374481C7914930072E604 = {
+		014C633F1C9A49FB00EDA26B = {
 			isa = PBXGroup;
 			children = (
-				010374531C7914930072E604 /* toe-remote */,
-				0103746D1C7914930072E604 /* toe-remoteTests */,
-				010374781C7914930072E604 /* toe-remoteUITests */,
-				010374521C7914930072E604 /* Products */,
+				014C634A1C9A49FB00EDA26B /* toe-remote */,
+				014C635F1C9A49FC00EDA26B /* toe-remoteTests */,
+				014C636A1C9A49FC00EDA26B /* toe-remoteUITests */,
+				014C63491C9A49FB00EDA26B /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		010374521C7914930072E604 /* Products */ = {
+		014C63491C9A49FB00EDA26B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				010374511C7914930072E604 /* toe-remote.app */,
-				0103746A1C7914930072E604 /* toe-remoteTests.xctest */,
-				010374751C7914930072E604 /* toe-remoteUITests.xctest */,
+				014C63481C9A49FB00EDA26B /* toe-remote.app */,
+				014C635C1C9A49FC00EDA26B /* toe-remoteTests.xctest */,
+				014C63671C9A49FC00EDA26B /* toe-remoteUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		010374531C7914930072E604 /* toe-remote */ = {
+		014C634A1C9A49FB00EDA26B /* toe-remote */ = {
 			isa = PBXGroup;
 			children = (
-				010374571C7914930072E604 /* AppDelegate.h */,
-				010374581C7914930072E604 /* AppDelegate.m */,
-				0103748A1C7918450072E604 /* MainViewController.h */,
-				0103748B1C7918450072E604 /* MainViewController.m */,
-				010374601C7914930072E604 /* Assets.xcassets */,
-				010374621C7914930072E604 /* LaunchScreen.storyboard */,
-				010374651C7914930072E604 /* Info.plist */,
-				010374541C7914930072E604 /* Supporting Files */,
+				014C637D1C9A515400EDA26B /* BLE.swift */,
+				014C634B1C9A49FB00EDA26B /* AppDelegate.swift */,
+				014C634D1C9A49FB00EDA26B /* SelectionViewController.swift */,
+				014C64341C9DCE0900EDA26B /* ButtonLayout.swift */,
+				014C63791C9A504B00EDA26B /* DeviceViewController.swift */,
+				014C63521C9A49FB00EDA26B /* Assets.xcassets */,
+				014C63541C9A49FB00EDA26B /* LaunchScreen.storyboard */,
+				014C63571C9A49FB00EDA26B /* Info.plist */,
 			);
 			path = "toe-remote";
 			sourceTree = "<group>";
 		};
-		010374541C7914930072E604 /* Supporting Files */ = {
+		014C635F1C9A49FC00EDA26B /* toe-remoteTests */ = {
 			isa = PBXGroup;
 			children = (
-				011A12B21C79499C0015540B /* BLE.h */,
-				011A12B31C79499C0015540B /* BLE.m */,
-				010374551C7914930072E604 /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		0103746D1C7914930072E604 /* toe-remoteTests */ = {
-			isa = PBXGroup;
-			children = (
-				0103746E1C7914930072E604 /* toe_remoteTests.m */,
-				010374701C7914930072E604 /* Info.plist */,
+				014C63601C9A49FC00EDA26B /* toe_remoteTests.swift */,
+				014C63621C9A49FC00EDA26B /* Info.plist */,
 			);
 			path = "toe-remoteTests";
 			sourceTree = "<group>";
 		};
-		010374781C7914930072E604 /* toe-remoteUITests */ = {
+		014C636A1C9A49FC00EDA26B /* toe-remoteUITests */ = {
 			isa = PBXGroup;
 			children = (
-				010374791C7914930072E604 /* toe_remoteUITests.m */,
-				0103747B1C7914930072E604 /* Info.plist */,
+				014C636B1C9A49FC00EDA26B /* toe_remoteUITests.swift */,
+				014C636D1C9A49FC00EDA26B /* Info.plist */,
 			);
 			path = "toe-remoteUITests";
 			sourceTree = "<group>";
@@ -145,13 +134,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		010374501C7914930072E604 /* toe-remote */ = {
+		014C63471C9A49FB00EDA26B /* toe-remote */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0103747E1C7914930072E604 /* Build configuration list for PBXNativeTarget "toe-remote" */;
+			buildConfigurationList = 014C63701C9A49FC00EDA26B /* Build configuration list for PBXNativeTarget "toe-remote" */;
 			buildPhases = (
-				0103744D1C7914930072E604 /* Sources */,
-				0103744E1C7914930072E604 /* Frameworks */,
-				0103744F1C7914930072E604 /* Resources */,
+				014C63441C9A49FB00EDA26B /* Sources */,
+				014C63451C9A49FB00EDA26B /* Frameworks */,
+				014C63461C9A49FB00EDA26B /* Resources */,
 			);
 			buildRules = (
 			);
@@ -159,69 +148,72 @@
 			);
 			name = "toe-remote";
 			productName = "toe-remote";
-			productReference = 010374511C7914930072E604 /* toe-remote.app */;
+			productReference = 014C63481C9A49FB00EDA26B /* toe-remote.app */;
 			productType = "com.apple.product-type.application";
 		};
-		010374691C7914930072E604 /* toe-remoteTests */ = {
+		014C635B1C9A49FC00EDA26B /* toe-remoteTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 010374811C7914930072E604 /* Build configuration list for PBXNativeTarget "toe-remoteTests" */;
+			buildConfigurationList = 014C63731C9A49FC00EDA26B /* Build configuration list for PBXNativeTarget "toe-remoteTests" */;
 			buildPhases = (
-				010374661C7914930072E604 /* Sources */,
-				010374671C7914930072E604 /* Frameworks */,
-				010374681C7914930072E604 /* Resources */,
+				014C63581C9A49FC00EDA26B /* Sources */,
+				014C63591C9A49FC00EDA26B /* Frameworks */,
+				014C635A1C9A49FC00EDA26B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0103746C1C7914930072E604 /* PBXTargetDependency */,
+				014C635E1C9A49FC00EDA26B /* PBXTargetDependency */,
 			);
 			name = "toe-remoteTests";
 			productName = "toe-remoteTests";
-			productReference = 0103746A1C7914930072E604 /* toe-remoteTests.xctest */;
+			productReference = 014C635C1C9A49FC00EDA26B /* toe-remoteTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		010374741C7914930072E604 /* toe-remoteUITests */ = {
+		014C63661C9A49FC00EDA26B /* toe-remoteUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 010374841C7914930072E604 /* Build configuration list for PBXNativeTarget "toe-remoteUITests" */;
+			buildConfigurationList = 014C63761C9A49FC00EDA26B /* Build configuration list for PBXNativeTarget "toe-remoteUITests" */;
 			buildPhases = (
-				010374711C7914930072E604 /* Sources */,
-				010374721C7914930072E604 /* Frameworks */,
-				010374731C7914930072E604 /* Resources */,
+				014C63631C9A49FC00EDA26B /* Sources */,
+				014C63641C9A49FC00EDA26B /* Frameworks */,
+				014C63651C9A49FC00EDA26B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				010374771C7914930072E604 /* PBXTargetDependency */,
+				014C63691C9A49FC00EDA26B /* PBXTargetDependency */,
 			);
 			name = "toe-remoteUITests";
 			productName = "toe-remoteUITests";
-			productReference = 010374751C7914930072E604 /* toe-remoteUITests.xctest */;
+			productReference = 014C63671C9A49FC00EDA26B /* toe-remoteUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		010374491C7914930072E604 /* Project object */ = {
+		014C63401C9A49FB00EDA26B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = eecs481;
 				TargetAttributes = {
-					010374501C7914930072E604 = {
-						CreatedOnToolsVersion = 7.2;
+					014C63471C9A49FB00EDA26B = {
+						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = PN4LD8V83J;
 					};
-					010374691C7914930072E604 = {
-						CreatedOnToolsVersion = 7.2;
-						TestTargetID = 010374501C7914930072E604;
+					014C635B1C9A49FC00EDA26B = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = PN4LD8V83J;
+						TestTargetID = 014C63471C9A49FB00EDA26B;
 					};
-					010374741C7914930072E604 = {
-						CreatedOnToolsVersion = 7.2;
-						TestTargetID = 010374501C7914930072E604;
+					014C63661C9A49FC00EDA26B = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = PN4LD8V83J;
+						TestTargetID = 014C63471C9A49FB00EDA26B;
 					};
 				};
 			};
-			buildConfigurationList = 0103744C1C7914930072E604 /* Build configuration list for PBXProject "toe-remote" */;
+			buildConfigurationList = 014C63431C9A49FB00EDA26B /* Build configuration list for PBXProject "toe-remote" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -229,36 +221,36 @@
 				en,
 				Base,
 			);
-			mainGroup = 010374481C7914930072E604;
-			productRefGroup = 010374521C7914930072E604 /* Products */;
+			mainGroup = 014C633F1C9A49FB00EDA26B;
+			productRefGroup = 014C63491C9A49FB00EDA26B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				010374501C7914930072E604 /* toe-remote */,
-				010374691C7914930072E604 /* toe-remoteTests */,
-				010374741C7914930072E604 /* toe-remoteUITests */,
+				014C63471C9A49FB00EDA26B /* toe-remote */,
+				014C635B1C9A49FC00EDA26B /* toe-remoteTests */,
+				014C63661C9A49FC00EDA26B /* toe-remoteUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		0103744F1C7914930072E604 /* Resources */ = {
+		014C63461C9A49FB00EDA26B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				010374641C7914930072E604 /* LaunchScreen.storyboard in Resources */,
-				010374611C7914930072E604 /* Assets.xcassets in Resources */,
+				014C63561C9A49FB00EDA26B /* LaunchScreen.storyboard in Resources */,
+				014C63531C9A49FB00EDA26B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		010374681C7914930072E604 /* Resources */ = {
+		014C635A1C9A49FC00EDA26B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		010374731C7914930072E604 /* Resources */ = {
+		014C63651C9A49FC00EDA26B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -268,53 +260,54 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0103744D1C7914930072E604 /* Sources */ = {
+		014C63441C9A49FB00EDA26B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				010374591C7914930072E604 /* AppDelegate.m in Sources */,
-				0103748C1C7918450072E604 /* MainViewController.m in Sources */,
-				010374561C7914930072E604 /* main.m in Sources */,
-				011A12B41C79499C0015540B /* BLE.m in Sources */,
+				014C634E1C9A49FB00EDA26B /* SelectionViewController.swift in Sources */,
+				014C634C1C9A49FB00EDA26B /* AppDelegate.swift in Sources */,
+				014C64351C9DCE0900EDA26B /* ButtonLayout.swift in Sources */,
+				014C637A1C9A504B00EDA26B /* DeviceViewController.swift in Sources */,
+				014C637E1C9A515400EDA26B /* BLE.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		010374661C7914930072E604 /* Sources */ = {
+		014C63581C9A49FC00EDA26B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0103746F1C7914930072E604 /* toe_remoteTests.m in Sources */,
+				014C63611C9A49FC00EDA26B /* toe_remoteTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		010374711C7914930072E604 /* Sources */ = {
+		014C63631C9A49FC00EDA26B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0103747A1C7914930072E604 /* toe_remoteUITests.m in Sources */,
+				014C636C1C9A49FC00EDA26B /* toe_remoteUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0103746C1C7914930072E604 /* PBXTargetDependency */ = {
+		014C635E1C9A49FC00EDA26B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 010374501C7914930072E604 /* toe-remote */;
-			targetProxy = 0103746B1C7914930072E604 /* PBXContainerItemProxy */;
+			target = 014C63471C9A49FB00EDA26B /* toe-remote */;
+			targetProxy = 014C635D1C9A49FC00EDA26B /* PBXContainerItemProxy */;
 		};
-		010374771C7914930072E604 /* PBXTargetDependency */ = {
+		014C63691C9A49FC00EDA26B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 010374501C7914930072E604 /* toe-remote */;
-			targetProxy = 010374761C7914930072E604 /* PBXContainerItemProxy */;
+			target = 014C63471C9A49FB00EDA26B /* toe-remote */;
+			targetProxy = 014C63681C9A49FC00EDA26B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		010374621C7914930072E604 /* LaunchScreen.storyboard */ = {
+		014C63541C9A49FB00EDA26B /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				010374631C7914930072E604 /* Base */,
+				014C63551C9A49FB00EDA26B /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -322,7 +315,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		0103747C1C7914930072E604 /* Debug */ = {
+		014C636E1C9A49FC00EDA26B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -362,11 +355,12 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		0103747D1C7914930072E604 /* Release */ = {
+		014C636F1C9A49FC00EDA26B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -404,35 +398,29 @@
 			};
 			name = Release;
 		};
-		0103747F1C7914930072E604 /* Debug */ = {
+		014C63711C9A49FC00EDA26B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "toe-remote/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "eecs481.toe-remote";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
-		010374801C7914930072E604 /* Release */ = {
+		014C63721C9A49FC00EDA26B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "toe-remote/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "eecs481.toe-remote";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
-		010374821C7914930072E604 /* Debug */ = {
+		014C63741C9A49FC00EDA26B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -444,7 +432,7 @@
 			};
 			name = Debug;
 		};
-		010374831C7914930072E604 /* Release */ = {
+		014C63751C9A49FC00EDA26B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -456,7 +444,7 @@
 			};
 			name = Release;
 		};
-		010374851C7914930072E604 /* Debug */ = {
+		014C63771C9A49FC00EDA26B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = "toe-remoteUITests/Info.plist";
@@ -468,7 +456,7 @@
 			};
 			name = Debug;
 		};
-		010374861C7914930072E604 /* Release */ = {
+		014C63781C9A49FC00EDA26B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = "toe-remoteUITests/Info.plist";
@@ -483,43 +471,40 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0103744C1C7914930072E604 /* Build configuration list for PBXProject "toe-remote" */ = {
+		014C63431C9A49FB00EDA26B /* Build configuration list for PBXProject "toe-remote" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0103747C1C7914930072E604 /* Debug */,
-				0103747D1C7914930072E604 /* Release */,
+				014C636E1C9A49FC00EDA26B /* Debug */,
+				014C636F1C9A49FC00EDA26B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0103747E1C7914930072E604 /* Build configuration list for PBXNativeTarget "toe-remote" */ = {
+		014C63701C9A49FC00EDA26B /* Build configuration list for PBXNativeTarget "toe-remote" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0103747F1C7914930072E604 /* Debug */,
-				010374801C7914930072E604 /* Release */,
+				014C63711C9A49FC00EDA26B /* Debug */,
+				014C63721C9A49FC00EDA26B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
-		010374811C7914930072E604 /* Build configuration list for PBXNativeTarget "toe-remoteTests" */ = {
+		014C63731C9A49FC00EDA26B /* Build configuration list for PBXNativeTarget "toe-remoteTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				010374821C7914930072E604 /* Debug */,
-				010374831C7914930072E604 /* Release */,
+				014C63741C9A49FC00EDA26B /* Debug */,
+				014C63751C9A49FC00EDA26B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
-		010374841C7914930072E604 /* Build configuration list for PBXNativeTarget "toe-remoteUITests" */ = {
+		014C63761C9A49FC00EDA26B /* Build configuration list for PBXNativeTarget "toe-remoteUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				010374851C7914930072E604 /* Debug */,
-				010374861C7914930072E604 /* Release */,
+				014C63771C9A49FC00EDA26B /* Debug */,
+				014C63781C9A49FC00EDA26B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 010374491C7914930072E604 /* Project object */;
+	rootObject = 014C63401C9A49FB00EDA26B /* Project object */;
 }

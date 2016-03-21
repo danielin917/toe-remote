@@ -64,60 +64,79 @@
         self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, self.view.bounds.size.height/10.0f, self.view.bounds.size.width, self.view.bounds.size.height - self.view.bounds.size.height/10.0f)];
         [self.view addSubview:self.mainView];
         
+        float height = self.mainView.bounds.size.height;
+        float width = self.mainView.bounds.size.width;
+        float buttonWidth = 0.175f * width;
+        float buttonHeight = 0.3f * height;
         // Set up the random button
         {
             UIButton *button = self.randomButton;
             button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            button.frame = CGRectMake(0.0f, 0.0f, 100.0f, 30.0f);
+            button.frame = CGRectMake((width - buttonWidth)/2.0f, 0.2 * height - buttonHeight/2.0f, buttonWidth, buttonHeight);
             [button addTarget:self
-                              action:@selector(randomButtonPressed)
+                    action:@selector(randomButtonPressed)
                     forControlEvents:UIControlEventTouchUpInside];
             [button setTitle:@"Random" forState:UIControlStateNormal];
             button.hidden = true;
+            button.backgroundColor = [UIColor blackColor];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            self.randomButton = button;
             [self.mainView addSubview:button];
         }
         {
             UIButton *button = self.redButton;
             button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            button.frame = CGRectMake(0.0f, 50.0f, 100.0f, 30.0f);
+            button.frame = CGRectMake(0.2f * width - buttonWidth/2.0f, 0.6*height - buttonHeight/2.0f, buttonWidth, buttonHeight);
             [button addTarget:self
-                       action:@selector(redButtonPressed)
-             forControlEvents:UIControlEventTouchUpInside];
+                    action:@selector(redButtonPressed)
+                    forControlEvents:UIControlEventTouchUpInside];
             [button setTitle:@"Red" forState:UIControlStateNormal];
             button.hidden = true;
+            button.backgroundColor = [UIColor redColor];
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            self.redButton = button;
             [self.mainView addSubview:button];
         }
         {
             UIButton *button = self.yellowButton;
             button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            button.frame = CGRectMake(0.0f, 100.0f, 100.0f, 30.0f);
+            button.frame = CGRectMake(0.4f * width - buttonWidth/2.0f, 0.6*height - buttonHeight/2.0f, buttonWidth, buttonHeight);
             [button addTarget:self
-                       action:@selector(yellowButtonPressed)
-             forControlEvents:UIControlEventTouchUpInside];
+                    action:@selector(yellowButtonPressed)
+                    forControlEvents:UIControlEventTouchUpInside];
             [button setTitle:@"Yellow" forState:UIControlStateNormal];
             button.hidden = true;
+            button.backgroundColor = [UIColor yellowColor];
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            self.yellowButton = button;
             [self.mainView addSubview:button];
         }
         {
             UIButton *button = self.greenButton;
             button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            button.frame = CGRectMake(0.0f, 150.0f, 100.0f, 30.0f);
+            button.frame = CGRectMake(0.6f * width - buttonWidth/2.0f, 0.6*height - buttonHeight/2.0f, buttonWidth, buttonHeight);
             [button addTarget:self
-                       action:@selector(greenButtonPressed)
-             forControlEvents:UIControlEventTouchUpInside];
+                    action:@selector(greenButtonPressed)
+                    forControlEvents:UIControlEventTouchUpInside];
             [button setTitle:@"Green" forState:UIControlStateNormal];
             button.hidden = true;
+            button.backgroundColor = [UIColor greenColor];
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            self.greenButton = button;
             [self.mainView addSubview:button];
         }
         {
             UIButton *button = self.blueButton;
             button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            button.frame = CGRectMake(0.0f, 200.0f, 100.0f, 30.0f);
+            button.frame = CGRectMake(0.8f * width - buttonWidth/2.0f, 0.6*height - buttonHeight/2.0f, buttonWidth, buttonHeight);
             [button addTarget:self
-                       action:@selector(blueButtonPressed)
-             forControlEvents:UIControlEventTouchUpInside];
+                    action:@selector(blueButtonPressed)
+                    forControlEvents:UIControlEventTouchUpInside];
             [button setTitle:@"Blue" forState:UIControlStateNormal];
             button.hidden = true;
+            button.backgroundColor = [UIColor blueColor];
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            self.blueButton = button;
             [self.mainView addSubview:button];
         }
     }
@@ -128,30 +147,35 @@
 - (void)randomButtonPressed {
     UInt8 buf[1] = {0x00};
     NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    NSLog(@"Random Button Pressed");
     [self.ble write:data];
 }
 
 - (void)redButtonPressed {
     UInt8 buf[1] = {0x01};
     NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    NSLog(@"Red Button Pressed");
     [self.ble write:data];
 }
 
 - (void)yellowButtonPressed {
     UInt8 buf[1] = {0x02};
     NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    NSLog(@"Yellow Button Pressed");
     [self.ble write:data];
 }
 
 - (void)greenButtonPressed {
     UInt8 buf[1] = {0x03};
     NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    NSLog(@"Green Button Pressed");
     [self.ble write:data];
 }
 
 - (void)blueButtonPressed {
     UInt8 buf[1] = {0x04};
     NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    NSLog(@"Blue Button Pressed");
     [self.ble write:data];
 }
 
@@ -221,6 +245,7 @@
 
 - (void) bleDidDisconnect {
     [self.connectButton setTitle:@"Connect" forState:UIControlStateNormal];
+    NSLog(@"Disconnected");
     
     self.randomButton.hidden = true;
     self.redButton.hidden = true;
@@ -232,12 +257,17 @@
 
 -(void) bleDidConnect {
     [self.connectButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+    NSLog(@"Connected");
     
     self.randomButton.hidden = false;
     self.redButton.hidden = false;
     self.yellowButton.hidden = false;
     self.greenButton.hidden = false;
     self.blueButton.hidden = false;
+}
+
+- (void) bleDidReceiveData:(unsigned char *)data length:(int)length {
+    NSLog([NSString stringWithCString:(char*)data length:length]);
 }
 
 - (void)didReceiveMemoryWarning {
