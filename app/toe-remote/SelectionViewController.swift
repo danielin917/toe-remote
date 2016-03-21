@@ -9,11 +9,16 @@ import CoreBluetooth
 
 class SelectionViewCell: UICollectionViewCell {
     var textLabel: UILabel!
-    var buttonView: UIView!
+    var buttonView: UIImageView!
 
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        
+        self.layer.cornerRadius = 10
+        self.layer.borderColor = UIColor.blackColor().CGColor
+        self.layer.borderWidth = 1
         
         textLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height/3))
         textLabel.adjustsFontSizeToFitWidth = true
@@ -21,7 +26,8 @@ class SelectionViewCell: UICollectionViewCell {
         textLabel.textAlignment = .Center
         contentView.addSubview(textLabel)
         
-        buttonView = UIView(frame: CGRect(x: 0, y: textLabel.frame.size.height, width: frame.size.width, height: frame.size.height*2/3))
+        buttonView = UIImageView(frame: CGRect(x: 0, y: textLabel.frame.size.height, width: frame.size.width, height: frame.size.height*2/3))
+        buttonView.contentMode = UIViewContentMode.ScaleAspectFit
         contentView.addSubview(buttonView)
     }
     
@@ -41,13 +47,15 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         // Do any additional setup after loading the view
         cachedLayouts = Dictionary()
         
+        addTitleView(self.view)
+        
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        let width = view.bounds.width / 3
+        let width = view.bounds.width / 3 - 20
         let height = view.bounds.height / 2
         layout.itemSize = CGSize(width: width, height: height)
         
-        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: CGRectMake(0, view.bounds.height/10, view.bounds.width, view.bounds.height*9/10), collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.registerClass(SelectionViewCell.self, forCellWithReuseIdentifier: "Cell")
@@ -64,18 +72,40 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         // Dispose of any resources that can be recreated.
     }
     
+    func refresh() {
+        retrieveNearbyDevices()
+    }
+    
+    func addTitleView(view: UIView) {
+        let titleBar = UIView(frame: CGRectMake(0, 0, view.bounds.width, view.bounds.height / 10))
+        let backButtonWidth: CGFloat = 100.0
+        
+        let title = UILabel(frame: CGRectMake(backButtonWidth, 0, titleBar.bounds.width - 2*backButtonWidth, titleBar.bounds.size.height))
+        title.text = "Toe Remote"
+        title.textAlignment = .Center
+        titleBar.addSubview(title)
+        
+        let refreshButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
+        refreshButton.setTitle("Refresh", forState: .Normal)
+        refreshButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        refreshButton.addTarget(self, action: Selector("refresh"), forControlEvents: .TouchUpInside)
+        titleBar.addSubview(refreshButton)
+        
+        view.addSubview(titleBar)
+    }
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return ble.peripherals.count
     }
+    
+    func nothing() { }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! SelectionViewCell
         assert(ble.peripherals.count > indexPath.item)
         let peripheral = ble.peripherals[indexPath.item]
-        cell.textLabel.text = peripheral.name
-        if let layout = cachedLayouts[peripheral.identifier.UUIDString] {
-            layout.addToView(cell.buttonView)
-        }
+        cell.textLabel.text = ble.getName(peripheral)
+        cell.buttonView.image = cachedLayouts[peripheral.identifier.UUIDString]?.thumbnail
         return cell
     }
     
@@ -121,6 +151,7 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     }
 
     func cleanup() {
+        print("Cleaning up")
         ble.cleanup()
     }
 

@@ -16,9 +16,12 @@ class Button: NSObject {
     var height: UInt8
     var title: String
     
-    var active: Bool
+    var button: UIButton?
     
-    init(ble: BLE, id: UInt8, x: UInt8, y: UInt8, width: UInt8, height: UInt8, title: String, active: Bool) {
+    var target: AnyObject!
+    var action: Selector!
+    
+    init(ble: BLE, id: UInt8, x: UInt8, y: UInt8, width: UInt8, height: UInt8, title: String) {
         self.ble = ble
         self.id = id
         self.x = x
@@ -26,8 +29,8 @@ class Button: NSObject {
         self.width = width
         self.height = height
         self.title = title
-        self.active = active
         super.init()
+        setTargetAction(nil, action: nil)
     }
     
     init(ble: BLE, data: NSData, active: Bool) {
@@ -40,8 +43,29 @@ class Button: NSObject {
         width = bytes[3]
         height = bytes[4]
         title = String(bytes: bytes.dropFirst(5), encoding: NSUTF8StringEncoding)!
-        self.active = active
         super.init()
+        setTargetAction(nil, action: nil)
+    }
+    
+    func setTargetAction(target: AnyObject?, action: Selector?) {
+        var realTarget: AnyObject
+        if target == nil {
+            realTarget = self
+        } else {
+            realTarget = target!
+        }
+        var realAction: Selector
+        if action == nil {
+            realAction = Selector("sendButtonPress")
+        } else {
+            realAction = action!
+        }
+        if button != nil {
+            button!.removeTarget(self.target, action: self.action, forControlEvents: .TouchUpInside)
+            button!.addTarget(realTarget, action: realAction, forControlEvents: .TouchUpInside)
+        }
+        self.target = realTarget
+        self.action = realAction
     }
     
     func sendButtonPress() {
@@ -55,28 +79,31 @@ class Button: NSObject {
     }
     
     func addToView(view: UIView) {
-        // Scale to view bounds
-        let viewHeight = view.bounds.height
-        let viewWidth = view.bounds.width
-        let rX = normalize(viewWidth, percent: x)
-        let rY = normalize(viewHeight, percent: y)
-        let rWidth = normalize(viewWidth, percent: width)
-        let rHeight = normalize(viewHeight, percent: height)
-        
-        let button = UIButton(frame: CGRectMake(rX, rY, rWidth, rHeight))
-        button.setTitle(title, forState: .Normal)
-        button.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        
-        if active {
-            button.addTarget(self, action: Selector("sendButtonPress"), forControlEvents: .TouchUpInside)
+        if button == nil {
+            // Scale to view bounds
+            let viewHeight = view.bounds.height
+            let viewWidth = view.bounds.width
+            let rX = normalize(viewWidth, percent: x)
+            let rY = normalize(viewHeight, percent: y)
+            let rWidth = normalize(viewWidth, percent: width)
+            let rHeight = normalize(viewHeight, percent: height)
+            
+            button = UIButton(frame: CGRectMake(rX, rY, rWidth, rHeight))
+            button!.layer.cornerRadius = 10
+            button!.layer.borderColor = UIColor.blackColor().CGColor
+            button!.layer.borderWidth = 1
+            button!.setTitle(title, forState: .Normal)
+            button!.setTitleColor(UIColor.blueColor(), forState: .Normal)
+            button!.addTarget(target, action: action, forControlEvents: .TouchUpInside)
         }
         print("[DEBUG] Added button with id: \(id) to view")
-        view.addSubview(button)
+        view.addSubview(button!)
     }
 }
 
 class ButtonLayout: NSObject {
     var buttons: Array<Button>
+    var thumbnail: UIImage?
     
     override init() {
         self.buttons = Array<Button>()
@@ -88,10 +115,22 @@ class ButtonLayout: NSObject {
         buttons.append(Button(ble: ble, data: data, active: active))
     }
     
+    func setTargetAction(target: AnyObject?, action: Selector) {
+        for button in buttons {
+            button.setTargetAction(target, action: action)
+        }
+    }
+    
     func addToView(view: UIView) {
         print("[DEBUG] Adding buttons to view")
         for button in buttons {
             button.addToView(view)
+        }
+        if thumbnail == nil {
+            UIGraphicsBeginImageContext(view.frame.size)
+            view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+            thumbnail = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
         }
     }
 }

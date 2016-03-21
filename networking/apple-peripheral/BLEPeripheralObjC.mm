@@ -26,7 +26,6 @@ static NSInteger MAX_CHUNK_SIZE = 64;
 
 - (void) send;
 - (void) write:(NSData *)data;
-- (bool) connected;
 
 @end
 
@@ -66,7 +65,7 @@ unsigned char BLEPeripheral::bytes_available() {
 }
 
 bool BLEPeripheral::connected() {
-    return [((__bridge BLEPeripheralImpl*)impl) connected];
+    return ((__bridge BLEPeripheralImpl*)impl).numWriteSubscribers > 0;
 }
 
 - (id) init:(const char *) name {
@@ -169,10 +168,6 @@ bool BLEPeripheral::connected() {
         [self.readBuffer appendData:request.value];
     }
     [peripheral respondToRequest:requests[0] withResult:CBATTErrorSuccess];
-}
-
-- (bool) connected {
-    return self.numWriteSubscribers > 0;
 }
 
 - (void)send {

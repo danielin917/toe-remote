@@ -34,6 +34,7 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     private      var characteristics = [String : CBCharacteristic]()
     private      var data:             NSMutableData?
     private(set) var peripherals     = [CBPeripheral]()
+    private(set) var peripheralNames = [String?]()
     private      var RSSICompletionHandler: ((NSNumber?, NSError?) -> ())?
     
     override init() {
@@ -41,6 +42,17 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         
         self.centralManager = CBCentralManager(delegate: self, queue: nil)
         self.data = NSMutableData()
+    }
+    
+    func getName(peripheral: CBPeripheral) -> String? {
+        for var i = 0; i < peripherals.count; ++i {
+            if peripheral.identifier.UUIDString == peripherals[i].identifier.UUIDString {
+                if peripheralNames[i] != nil {
+                    return peripheralNames[i]
+                }
+            }
+        }
+        return peripheral.name
     }
     
     @objc private func scanTimeout() {
@@ -181,20 +193,26 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject],RSSI: NSNumber) {
         print("[DEBUG] Find peripheral: \(peripheral.identifier.UUIDString) RSSI: \(RSSI)")
-        
+
+        var name: String?
+        for (key, obj) in advertisementData {
+            if key == CBAdvertisementDataLocalNameKey {
+                name = obj as? String
+            }
+        }
         for var i = 0; i < self.peripherals.count; i++ {
             
             let p = self.peripherals[i] as CBPeripheral
             
             if(p.identifier.UUIDString == peripheral.identifier.UUIDString) {
-                
                 self.peripherals[i] = peripheral
-                
+                self.peripheralNames[i] = name
                 return
             }
         }
         
         self.peripherals.append(peripheral)
+        self.peripheralNames.append(name)
     }
     
     func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {

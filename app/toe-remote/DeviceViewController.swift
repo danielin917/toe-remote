@@ -60,11 +60,16 @@ class DeviceViewController: UIViewController, BLEDelegate {
         })
     }
     
-    func refresh() {
-        print("[DEBUG] Sending another Button Layout Request")
-        buttonLayout = ButtonLayout()
-        let bytes: [UInt8] = [0x00, 0x00]
-        ble?.write(data: NSData(bytes: bytes, length: 2))
+    func selectButtonToEdit() {
+        
+    }
+    
+    func startEditing() {
+        buttonLayout?.setTargetAction(self, action: Selector("selectButtonToEdit"))
+    }
+    
+    func finishEditing() {
+        buttonLayout?.setTargetAction(nil, action: nil)
     }
     
     func addTitleView(view: UIView) {
@@ -72,7 +77,10 @@ class DeviceViewController: UIViewController, BLEDelegate {
         let backButtonWidth: CGFloat = 100.0
         
         let title = UILabel(frame: CGRectMake(backButtonWidth, 0, titleBar.bounds.width - 2*backButtonWidth, titleBar.bounds.size.height))
-        title.text = self.peripheral.name
+        title.text = ble?.getName(peripheral)
+        if title.text == nil {
+            title.text = peripheral.name
+        }
         title.textAlignment = .Center
         titleBar.addSubview(title)
         
@@ -84,13 +92,13 @@ class DeviceViewController: UIViewController, BLEDelegate {
         }
         titleBar.addSubview(backButton)
         
-        let refreshButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
-        refreshButton.setTitle("Refresh", forState: .Normal)
-        refreshButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        let editButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
+        editButton.setTitle("Edit", forState: .Normal)
+        editButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         if selectionViewController != nil {
-            refreshButton.addTarget(self, action: Selector("refresh"), forControlEvents: .TouchUpInside)
+            editButton.addTarget(self, action: Selector("edit"), forControlEvents: .TouchUpInside)
         }
-        titleBar.addSubview(refreshButton)
+        titleBar.addSubview(editButton)
         
         view.addSubview(titleBar)
     }
@@ -99,6 +107,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
     
     func bleDidUpdateState(state: CBCentralManagerState) {
         if state == .PoweredOn {
+            ble?.connectToPeripheral(peripheral)
         }
     }
     
@@ -114,7 +123,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
     
     func bleDidDisconenctFromPeripheral() {
         print("[DEBUG] Disconnected from peripheral")
-        popView()
+        ble?.connectToPeripheral(peripheral)
     }
     
     func bleDidReceiveData(data: NSData?) {
