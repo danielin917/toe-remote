@@ -75,4 +75,26 @@ bool ServerInterface::call_function(unsigned char func_index)
     return true;
 }
 
-bool ServerInterface::send_layout() { return true; }
+bool ServerInterface::send_layout() { 
+	if(btn_vec.size() == 0)
+                return false;
+        
+	unsigned char num_buttons = (unsigned char)btn_vec.size();
+        ble->write(&num_buttons, 1); 
+       	
+	unsigned char buf[55]; 
+        for(int i = 0; i < btn_vec.size(); i++)
+        {
+             
+                buf[0] = btn_vec[i]->id;
+                buf[1] = btn_vec[i]->size_x;
+                buf[2] = btn_vec[i]->size_y;
+                buf[3] = btn_vec[i]->grid_x;
+                buf[4] = btn_vec[i]->grid_y;
+                strncpy((char*)(buf + 5) ,btn_vec[i]->text, 49);    
+                ble->write(buf, 55);
+        }
+        ble->process();
+
+return true; 
+}

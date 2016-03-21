@@ -23,7 +23,7 @@
 
 
 BLEPeripheral::BLEPeripheral(const char *name) : impl(nullptr) {
-  ble_set_name(name);
+  ble_set_name((char*)name);
   ble_begin();
 }
 
@@ -31,8 +31,8 @@ void BLEPeripheral::write_byte(unsigned char data) {
   ble_write(data);
 }
 
-void BLEPeripheral::write(unsigned char *data, unsigned char len) {
-  ble_write_bytes(data, len);
+void BLEPeripheral::write(const unsigned char *data, unsigned char len) {
+  ble_write_bytes((unsigned char*)data, len);
 }
 
 void BLEPeripheral::process() {
