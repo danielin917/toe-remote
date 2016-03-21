@@ -29,7 +29,7 @@ void setup()
   //ble_set_pins(9, 8);
   
   // Set your BLE Shield name here, max. length 10
-  ble_set_name("On/Off");
+  ble_set_name("Light Show");
   
   // Init. and start BLE library.
   ble_begin();

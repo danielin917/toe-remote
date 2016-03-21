@@ -47,13 +47,20 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
-        cell.backgroundColor = UIColor.whiteColor()
+        cell.backgroundColor = UIColor.blackColor()
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         print("[DEBUG] Selected item: ", indexPath.item)
         assert(ble.peripherals.count > indexPath.item)
+        
+        let peripheral = ble.peripherals[indexPath.item]
+        let deviceViewController = DeviceViewController(selectionViewController: self, ble: ble, peripheral: peripheral, buttonLayout: nil)
+        self.presentViewController(deviceViewController, animated: true, completion: {();
+            self.ble.delegate = deviceViewController
+            self.ble.connectToPeripheral(peripheral)
+        })
     }
     
     func bleDidScanTimeout() {
