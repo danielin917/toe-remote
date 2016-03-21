@@ -46,6 +46,7 @@ bool ServerInterface::process_command()
     {
         return false;
     }
+    ble->process();
     if (ble->connected())
     {
         if (ble->bytes_available() >= 2) /*only read if we have a full package*/
@@ -97,7 +98,7 @@ bool ServerInterface::send_layout()
         buf[2] = btn_vec[i]->y;
         buf[3] = btn_vec[i]->width;
         buf[4] = btn_vec[i]->height;
-        strncpy((char *)(buf + 5), btn_vec[i]->text, 49);
+        strncpy((char *)(buf + 5), btn_vec[i]->text, 50);
         ble->write(buf, 55);
         ble->process();
     }

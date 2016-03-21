@@ -27,9 +27,8 @@ struct Button{
             : x(_x), y(_y), width(_width),
               height(_height), text(nullptr)
         {
-                char * buf = new char[49];
-                strncpy(buf, _text, 49);
-                text = buf;
+                text = new char[50];
+                strncpy(text, _text, 50);
         }
 
         ~Button()
