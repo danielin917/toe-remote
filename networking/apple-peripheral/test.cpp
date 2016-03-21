@@ -18,7 +18,7 @@ int main() {
         Button{66, 0, 30, 30, "Button C"},
         Button{0, 33, 100, 67, "The Rest of the Screen"}};
     const std::vector<button_func> funcs = {&a, &b, &c, &r};
-    ServerInterface server;
+    ServerInterface<button_func> server;
     server.set_device_name(name);
     for (unsigned i = 0; i < buttons.size(); ++i) {
         const auto &button = buttons[i];
@@ -27,6 +27,7 @@ int main() {
     }
     server.start_server();
     while (true) {
-        server.process_command();
+        while (server.process_command()) {}
+        sleep(1);
     }
 }

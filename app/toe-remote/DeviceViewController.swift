@@ -17,6 +17,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
     var buttonView: UIView?
     var selectionViewController: SelectionViewController?
     var viewLoaded: Bool
+    var paused: Bool
     
     init(selectionViewController: SelectionViewController?, ble: BLE?, peripheral: CBPeripheral) {
         self.selectionViewController = selectionViewController
@@ -26,6 +27,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
         self.readBuffer = NSMutableData()
         self.index = 0
         self.viewLoaded = false
+        self.paused = false
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -52,10 +54,11 @@ class DeviceViewController: UIViewController, BLEDelegate {
     }
     
     func popView() {
-        ble?.disconnectFromPeripheral(peripheral)
         self.dismissViewControllerAnimated(true, completion: {();
             guard let selectionViewController = self.selectionViewController else { return }
             self.ble?.delegate = selectionViewController
+            self.ble?.disconnectFromPeripheral(self.peripheral)
+            selectionViewController.deviceViewController = nil
             selectionViewController.retrieveNearbyDevices()
         })
     }
@@ -107,13 +110,16 @@ class DeviceViewController: UIViewController, BLEDelegate {
     
     func bleDidUpdateState(state: CBCentralManagerState) {
         if state == .PoweredOn {
-            ble?.connectToPeripheral(peripheral)
+            if !paused {
+                ble?.connectToPeripheral(peripheral)
+            }
         }
     }
     
     func bleDidConnectToPeripheral() {
         print("[DEBUG] Connected to peripheral")
         if buttonLayout == nil {
+            ble?.enableNotifications(true)
             print("[DEBUG] Sending Button Layout Request")
             buttonLayout = ButtonLayout()
             let bytes: [UInt8] = [0x00, 0x00]
@@ -123,7 +129,9 @@ class DeviceViewController: UIViewController, BLEDelegate {
     
     func bleDidDisconenctFromPeripheral() {
         print("[DEBUG] Disconnected from peripheral")
-        ble?.connectToPeripheral(peripheral)
+        if !paused {
+            ble?.connectToPeripheral(peripheral)
+        }
     }
     
     func bleDidReceiveData(data: NSData?) {
@@ -145,11 +153,21 @@ class DeviceViewController: UIViewController, BLEDelegate {
         }
         if numButtons == 0 {
             print("[DEBUG] Recieved the layout")
+            // ble.enableNotifications(false)
             saveLayout()
             if self.viewLoaded {
                 buttonLayout.addToView(buttonView!)
             }
         }
+    }
+    
+    func resume() {
+        paused = false
+        ble?.connectToPeripheral(peripheral)
+    }
+    
+    func pause() {
+        paused = true
     }
     
 }

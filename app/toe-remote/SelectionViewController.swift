@@ -41,6 +41,7 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     var collectionView: UICollectionView!
     var ble: BLE!
     var cachedLayouts: Dictionary<String, ButtonLayout>!
+    var deviceViewController: DeviceViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,9 +115,11 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         assert(ble.peripherals.count > indexPath.item)
         
         let peripheral = ble.peripherals[indexPath.item]
-        let deviceViewController = DeviceViewController(selectionViewController: self, ble: ble, peripheral: peripheral)
-        self.presentViewController(deviceViewController, animated: true, completion: {();
-            self.ble.delegate = deviceViewController
+        if deviceViewController?.peripheral != peripheral {
+            deviceViewController = DeviceViewController(selectionViewController: self, ble: ble, peripheral: peripheral)
+        }
+        self.presentViewController(deviceViewController!, animated: true, completion: {();
+            self.ble.delegate = self.deviceViewController!
             self.ble.connectToPeripheral(peripheral)
         })
     }
@@ -149,10 +152,23 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     func retrieveNearbyDevices() {
         ble.startScanning(1)
     }
+    
+    func resume() {
+        print("Resuming")
+        if deviceViewController != nil {
+            deviceViewController!.resume()
+        } else {
+            retrieveNearbyDevices()
+        }
+    }
 
-    func cleanup() {
-        print("Cleaning up")
+    func pause() {
+        print("Pausing")
+        if deviceViewController != nil {
+            deviceViewController?.pause()
+        }
         ble.cleanup()
+        self.collectionView.reloadData()
     }
 
 }

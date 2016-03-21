@@ -88,6 +88,8 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             self.centralManager.stopScan()
         }
         
+        peripherals.removeAll()
+        peripheralNames.removeAll()
         guard let peripheral = activePeripheral else { return }
         if let services = peripheral.services {
             for service in services {

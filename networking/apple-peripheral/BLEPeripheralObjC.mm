@@ -20,12 +20,12 @@ static NSInteger MAX_CHUNK_SIZE = 64;
 
 @property (nonatomic, readwrite) NSUInteger readBufferIndex;
 @property (nonatomic, readwrite) NSUInteger sendDataIndex;
-@property (nonatomic, readwrite) NSUInteger numReadSubscribers;
-@property (nonatomic, readwrite) NSUInteger numWriteSubscribers;
+@property (nonatomic, readwrite) NSUInteger numSubscribers;
 
 
 - (void) send;
 - (void) write:(NSData *)data;
+- (void) advertise:(BOOL)shouldAdvertise;
 
 @end
 
@@ -65,15 +65,14 @@ unsigned char BLEPeripheral::bytes_available() {
 }
 
 bool BLEPeripheral::connected() {
-    return ((__bridge BLEPeripheralImpl*)impl).numWriteSubscribers > 0;
+    return ((__bridge BLEPeripheralImpl*)impl).numSubscribers > 0;
 }
 
 - (id) init:(const char *) name {
     self = [super init];
     if (self) {
         NSLog(@"Initializaing");
-        self.numReadSubscribers = 0;
-        self.numWriteSubscribers = 0;
+        self.numSubscribers = 0;
         self.sendDataIndex = 0;
         self.readBufferIndex = 0;
         self.dataToSend = [[NSMutableData alloc] init];
@@ -103,12 +102,7 @@ bool BLEPeripheral::connected() {
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error {
     NSLog(@"Service Added");
-    [self.peripheralManager startAdvertising: @{
-                                                CBAdvertisementDataServiceUUIDsKey:
-                                                    @[[CBUUID UUIDWithString: @RBL_SERVICE_UUID]],
-                                                CBAdvertisementDataLocalNameKey: self.serviceName
-                                                }
-     ];
+    [self advertise:true];
 }
 
 - (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(NSError *)error{
@@ -117,26 +111,27 @@ bool BLEPeripheral::connected() {
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic {
     
-    if (characteristic == self.readCharacteristic) {
-        NSLog(@"Got a read subscriber");
-        self.numReadSubscribers += 1;
-    } else if (characteristic == self.writeCharacteristic) {
-        NSLog(@"Got a write subscriber");
-        self.numWriteSubscribers += 1;
+
+    if (characteristic == self.writeCharacteristic) {
+        NSLog(@"Got a subscriber");
+        self.numSubscribers += 1;
+        assert(self.numSubscribers == 1);
+        [self advertise:false];
     }
 }
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didUnsubscribeFromCharacteristic:(CBCharacteristic *)characteristic {
-    if (characteristic == self.readCharacteristic) {
-        self.numReadSubscribers -= 1;
-    } else if (characteristic == self.writeCharacteristic) {
-        self.numWriteSubscribers -= 1;
+    if (characteristic == self.writeCharacteristic) {
+        NSLog(@"Lost a subscriber");
+        self.numSubscribers -= 1;
+        assert(self.numSubscribers == 0);
+        [self advertise:true];
     }
 }
 
 - (void)write:(NSData *)data {
     NSLog(@"[DEBUG] Data to write: %@", [data description]);
-    if (self.numWriteSubscribers == 0) {
+    if (self.numSubscribers == 0) {
         return;
     }
     if (self.sendDataIndex < self.dataToSend.length) {
@@ -168,6 +163,22 @@ bool BLEPeripheral::connected() {
         [self.readBuffer appendData:request.value];
     }
     [peripheral respondToRequest:requests[0] withResult:CBATTErrorSuccess];
+}
+
+- (void) advertise:(BOOL)shouldAdvertise {
+    if (shouldAdvertise) {
+        [self.peripheralManager startAdvertising:
+                @{
+                    CBAdvertisementDataServiceUUIDsKey: @[[CBUUID UUIDWithString: @RBL_SERVICE_UUID]],
+                    CBAdvertisementDataLocalNameKey: self.serviceName
+                }
+         ];
+        NSLog(@"Advertisement started");
+    } else {
+        [self.peripheralManager stopAdvertising];
+        NSLog(@"Advertisement stopped");
+
+    }
 }
 
 - (void)send {
