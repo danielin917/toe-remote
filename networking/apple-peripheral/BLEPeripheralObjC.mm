@@ -136,6 +136,7 @@ bool BLEPeripheral::connected() {
 }
 
 - (void)write:(NSData *)data {
+    NSLog(@"[DEBUG] Data to write: %@", [data description]);
     if (self.numWriteSubscribers == 0) {
         return;
     }
@@ -164,6 +165,7 @@ bool BLEPeripheral::connected() {
         return;
     }
     for (CBATTRequest *request in requests) {
+        NSLog(@"[DEBUG] Sent data: %@", [request.value description]);
         [self.readBuffer appendData:request.value];
     }
     [peripheral respondToRequest:requests[0] withResult:CBATTErrorSuccess];
@@ -179,13 +181,12 @@ bool BLEPeripheral::connected() {
         if (length > MAX_CHUNK_SIZE) {
             length = MAX_CHUNK_SIZE;
         }
-        NSData *chunk = [self.dataToSend subdataWithRange:{self.sendDataIndex, self.sendDataIndex + length}];
+        NSData *chunk = [self.dataToSend subdataWithRange:{self.sendDataIndex, length}];
         bool didSend = [self.peripheralManager updateValue:chunk forCharacteristic:self.writeCharacteristic onSubscribedCentrals:nil];
         if (!didSend) {
             return;
         }
-        NSString *stringFromData = [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding];
-        NSLog(@"Sent: %@", stringFromData);
+        NSLog(@"Sent: %@", [chunk description]);
         self.sendDataIndex += length;
     }
 }

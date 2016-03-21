@@ -145,36 +145,36 @@
 #pragma mark - Button Actions
 
 - (void)randomButtonPressed {
-    UInt8 buf[1] = {0x00};
-    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    UInt8 buf[2] = {0x01, 0x00};
+    NSData *data = [[NSData alloc] initWithBytes:buf length:2];
     NSLog(@"Random Button Pressed");
     [self.ble write:data];
 }
 
 - (void)redButtonPressed {
-    UInt8 buf[1] = {0x01};
-    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    UInt8 buf[2] = {0x01, 0x01};
+    NSData *data = [[NSData alloc] initWithBytes:buf length:2];
     NSLog(@"Red Button Pressed");
     [self.ble write:data];
 }
 
 - (void)yellowButtonPressed {
-    UInt8 buf[1] = {0x02};
-    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    UInt8 buf[2] = {0x01, 0x02};
+    NSData *data = [[NSData alloc] initWithBytes:buf length:2];
     NSLog(@"Yellow Button Pressed");
     [self.ble write:data];
 }
 
 - (void)greenButtonPressed {
-    UInt8 buf[1] = {0x03};
-    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    UInt8 buf[2] = {0x01, 0x03};
+    NSData *data = [[NSData alloc] initWithBytes:buf length:2];
     NSLog(@"Green Button Pressed");
     [self.ble write:data];
 }
 
 - (void)blueButtonPressed {
-    UInt8 buf[1] = {0x04};
-    NSData *data = [[NSData alloc] initWithBytes:buf length:1];
+    UInt8 buf[2] = {0x01, 0x04};
+    NSData *data = [[NSData alloc] initWithBytes:buf length:2];
     NSLog(@"Blue Button Pressed");
     [self.ble write:data];
 }

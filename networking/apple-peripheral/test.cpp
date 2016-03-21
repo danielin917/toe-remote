@@ -1,6 +1,7 @@
 #include "../Main_sketch/ServerInterface.h"
 #include "BLEPeripheral.h"
 
+#include <array>
 #include <vector>
 #include <iostream>
 
@@ -11,11 +12,11 @@ void r() { std::cout << "Button Rest pressed" << std::endl; }
 
 int main() {
     const char *name = "test-app";
-    const std::vector<Button> buttons = {
-        {0, 0, 30, 30, "Button A"},
-        {33, 0, 30, 30, "Button B"},
-        {66, 0, 30, 30, "Button C"},
-        {0, 33, 100, 67, "The Rest of the Screen"}};
+    const std::array<Button, 4> buttons = {
+        Button{0, 0, 30, 30, "Button A"},
+        Button{33, 0, 30, 30, "Button B"},
+        Button{66, 0, 30, 30, "Button C"},
+        Button{0, 33, 100, 67, "The Rest of the Screen"}};
     const std::vector<button_func> funcs = {&a, &b, &c, &r};
     ServerInterface server;
     server.set_device_name(name);

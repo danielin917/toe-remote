@@ -127,8 +127,10 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func write(data data: NSData) {
         
-        guard let char = self.characteristics[RBL_CHAR_TX_UUID] else { return }
-        
+        guard let char = self.characteristics[RBL_CHAR_RX_UUID] else { return }
+        if (self.activePeripheral != nil) {
+            print("Writing data: \(data)")
+        }
         self.activePeripheral?.writeValue(data, forCharacteristic: char, type: .WithoutResponse)
     }
     
@@ -208,7 +210,7 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         self.activePeripheral?.delegate = self
         self.activePeripheral?.discoverServices([CBUUID(string: RBL_SERVICE_UUID)])
         
-        self.delegate?.bleDidConnectToPeripheral()
+        // self.delegate?.bleDidConnectToPeripheral()
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
@@ -261,6 +263,7 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
         
         enableNotifications(true)
+        self.delegate?.bleDidConnectToPeripheral()
     }
     
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {

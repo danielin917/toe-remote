@@ -16,7 +16,6 @@ class Button: NSObject {
     var height: UInt8
     var title: String
     
-    var button: UIButton?
     var active: Bool
     
     init(ble: BLE, id: UInt8, x: UInt8, y: UInt8, width: UInt8, height: UInt8, title: String, active: Bool) {
@@ -46,6 +45,7 @@ class Button: NSObject {
     }
     
     func sendButtonPress() {
+        print("Sending button press: \(id)")
         let bytes: [UInt8] = [0x01, id]
         ble.write(data: NSData(bytes: bytes, length: 2))
     }
@@ -54,9 +54,7 @@ class Button: NSObject {
         return CGFloat(percent) * dimension / 100
     }
     
-    func addToView(view: UIView) -> UIView {
-        guard button == nil else { return button! }
-        
+    func addToView(view: UIView) {
         // Scale to view bounds
         let viewHeight = view.bounds.height
         let viewWidth = view.bounds.width
@@ -65,14 +63,15 @@ class Button: NSObject {
         let rWidth = normalize(viewWidth, percent: width)
         let rHeight = normalize(viewHeight, percent: height)
         
-        button = UIButton(frame: CGRectMake(rX, rY, rWidth, rHeight))
-        button!.setTitle(title, forState: .Normal)
+        let button = UIButton(frame: CGRectMake(rX, rY, rWidth, rHeight))
+        button.setTitle(title, forState: .Normal)
+        button.setTitleColor(UIColor.blueColor(), forState: .Normal)
         
         if active {
-            button!.addTarget(self, action: Selector("sendButtonPress"), forControlEvents: .TouchUpInside)
+            button.addTarget(self, action: Selector("sendButtonPress"), forControlEvents: .TouchUpInside)
         }
-        
-        return button!
+        print("[DEBUG] Added button with id: \(id) to view")
+        view.addSubview(button)
     }
 }
 
@@ -85,10 +84,12 @@ class ButtonLayout: NSObject {
     }
     
     func addButton(ble: BLE, data: NSData, active: Bool) {
+        print("[DEBUG] Adding a button to the layout")
         buttons.append(Button(ble: ble, data: data, active: active))
     }
     
     func addToView(view: UIView) {
+        print("[DEBUG] Adding buttons to view")
         for button in buttons {
             button.addToView(view)
         }

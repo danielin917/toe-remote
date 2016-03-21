@@ -14,7 +14,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
     var readBuffer: NSMutableData
     var index: Int
     var numButtons: UInt8?
-    var buttonView: UIView!
+    var buttonView: UIView?
     var selectionViewController: SelectionViewController?
     var viewLoaded: Bool
     
@@ -27,9 +27,6 @@ class DeviceViewController: UIViewController, BLEDelegate {
         self.index = 0
         self.viewLoaded = false
         super.init(nibName: nil, bundle: nil)
-        
-        let titleHeight = self.view.bounds.height / 10.0
-        self.buttonView = UIView(frame: CGRectMake(0, titleHeight, self.view.bounds.width, titleHeight * 9.0))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,8 +36,11 @@ class DeviceViewController: UIViewController, BLEDelegate {
     override func viewDidLoad() {
         self.view.backgroundColor = UIColor.whiteColor()
         addTitleView(self.view)
+        let titleHeight = self.view.bounds.height / 10.0
+        self.buttonView = UIView(frame: CGRectMake(0, titleHeight, self.view.bounds.width, titleHeight * 9.0))
+        view.addSubview(buttonView!)
         if buttonLayout != nil {
-            buttonLayout!.addToView(buttonView)
+            buttonLayout!.addToView(buttonView!)
         }
         viewLoaded = true
     }
@@ -60,6 +60,13 @@ class DeviceViewController: UIViewController, BLEDelegate {
         })
     }
     
+    func refresh() {
+        print("[DEBUG] Sending another Button Layout Request")
+        buttonLayout = ButtonLayout()
+        let bytes: [UInt8] = [0x00, 0x00]
+        ble?.write(data: NSData(bytes: bytes, length: 2))
+    }
+    
     func addTitleView(view: UIView) {
         let titleBar = UIView(frame: CGRectMake(0, 0, view.bounds.width, view.bounds.height / 10))
         let backButtonWidth: CGFloat = 100.0
@@ -77,6 +84,14 @@ class DeviceViewController: UIViewController, BLEDelegate {
         }
         titleBar.addSubview(backButton)
         
+        let refreshButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
+        refreshButton.setTitle("Refresh", forState: .Normal)
+        refreshButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        if selectionViewController != nil {
+            refreshButton.addTarget(self, action: Selector("refresh"), forControlEvents: .TouchUpInside)
+        }
+        titleBar.addSubview(refreshButton)
+        
         view.addSubview(titleBar)
     }
     
@@ -90,6 +105,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
     func bleDidConnectToPeripheral() {
         print("[DEBUG] Connected to peripheral")
         if buttonLayout == nil {
+            print("[DEBUG] Sending Button Layout Request")
             buttonLayout = ButtonLayout()
             let bytes: [UInt8] = [0x00, 0x00]
             ble?.write(data: NSData(bytes: bytes, length: 2))
@@ -122,7 +138,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
             print("[DEBUG] Recieved the layout")
             saveLayout()
             if self.viewLoaded {
-                buttonLayout.addToView(buttonView)
+                buttonLayout.addToView(buttonView!)
             }
         }
     }
