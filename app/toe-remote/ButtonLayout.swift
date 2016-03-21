@@ -17,8 +17,9 @@ class Button: NSObject {
     var title: String
     
     var button: UIButton?
+    var active: Bool
     
-    init(ble: BLE, id: UInt8, x: UInt8, y: UInt8, width: UInt8, height: UInt8, title: String) {
+    init(ble: BLE, id: UInt8, x: UInt8, y: UInt8, width: UInt8, height: UInt8, title: String, active: Bool) {
         self.ble = ble
         self.id = id
         self.x = x
@@ -26,10 +27,11 @@ class Button: NSObject {
         self.width = width
         self.height = height
         self.title = title
+        self.active = active
         super.init()
     }
     
-    init(ble: BLE, data: NSData) {
+    init(ble: BLE, data: NSData, active: Bool) {
         self.ble = ble
         assert(data.length >= 55)
         let bytes = UnsafeBufferPointer<UInt8>(start: UnsafePointer<UInt8>(data.bytes), count: data.length)
@@ -39,6 +41,7 @@ class Button: NSObject {
         width = bytes[3]
         height = bytes[4]
         title = String(bytes: bytes.dropFirst(5), encoding: NSUTF8StringEncoding)!
+        self.active = active
         super.init()
     }
     
@@ -65,7 +68,9 @@ class Button: NSObject {
         button = UIButton(frame: CGRectMake(rX, rY, rWidth, rHeight))
         button!.setTitle(title, forState: .Normal)
         
-        button?.addTarget(self, action: Selector("sendButtonPress"), forControlEvents: .TouchUpInside)
+        if active {
+            button!.addTarget(self, action: Selector("sendButtonPress"), forControlEvents: .TouchUpInside)
+        }
         
         return button!
     }
@@ -79,8 +84,8 @@ class ButtonLayout: NSObject {
         super.init()
     }
     
-    func addButton(ble: BLE, data: NSData) {
-        buttons.append(Button(ble: ble, data: data))
+    func addButton(ble: BLE, data: NSData, active: Bool) {
+        buttons.append(Button(ble: ble, data: data, active: active))
     }
     
     func addToView(view: UIView) {

@@ -9,21 +9,23 @@ import CoreBluetooth
 
 class DeviceViewController: UIViewController, BLEDelegate {
     var ble: BLE?
-    var peripheral: CBPeripheral?
+    var peripheral: CBPeripheral
     var buttonLayout: ButtonLayout?
     var readBuffer: NSMutableData
     var index: Int
     var numButtons: UInt8?
     var buttonView: UIView!
-    var selectionViewController: SelectionViewController
+    var selectionViewController: SelectionViewController?
+    var viewLoaded: Bool
     
-    init(selectionViewController: SelectionViewController, ble: BLE, peripheral: CBPeripheral, buttonLayout: ButtonLayout?) {
+    init(selectionViewController: SelectionViewController?, ble: BLE?, peripheral: CBPeripheral) {
         self.selectionViewController = selectionViewController
         self.ble = ble
         self.peripheral = peripheral
-        self.buttonLayout = buttonLayout
+        self.buttonLayout = selectionViewController?.cachedLayouts[peripheral.identifier.UUIDString]
         self.readBuffer = NSMutableData()
         self.index = 0
+        self.viewLoaded = false
         super.init(nibName: nil, bundle: nil)
         
         let titleHeight = self.view.bounds.height / 10.0
@@ -31,26 +33,30 @@ class DeviceViewController: UIViewController, BLEDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        self.selectionViewController = SelectionViewController()
-        self.readBuffer = NSMutableData()
-        self.index = 0
-        super.init(coder: aDecoder)
-        let titleHeight = self.view.bounds.height / 10.0
-        self.buttonView = UIView(frame: CGRectMake(0, titleHeight, self.view.bounds.width, titleHeight * 9.0))
+        fatalError("Method not implemented")
     }
     
     override func viewDidLoad() {
+        self.view.backgroundColor = UIColor.whiteColor()
         addTitleView(self.view)
-        buttonLayout?.addToView(buttonView)
+        if buttonLayout != nil {
+            buttonLayout!.addToView(buttonView)
+        }
+        viewLoaded = true
+    }
+    
+    func saveLayout() {
+        guard let buttonLayout = buttonLayout else { return }
+        let key = peripheral.identifier.UUIDString
+        selectionViewController?.cachedLayouts.updateValue(buttonLayout, forKey: key)
     }
     
     func popView() {
-        if let peripheral = peripheral {
-            ble?.disconnectFromPeripheral(peripheral)
-        }
+        ble?.disconnectFromPeripheral(peripheral)
         self.dismissViewControllerAnimated(true, completion: {();
-            self.ble?.delegate = self.selectionViewController
-            self.selectionViewController.retrieveNearbyDevices()
+            guard let selectionViewController = self.selectionViewController else { return }
+            self.ble?.delegate = selectionViewController
+            selectionViewController.retrieveNearbyDevices()
         })
     }
     
@@ -59,14 +65,16 @@ class DeviceViewController: UIViewController, BLEDelegate {
         let backButtonWidth: CGFloat = 100.0
         
         let title = UILabel(frame: CGRectMake(backButtonWidth, 0, titleBar.bounds.width - 2*backButtonWidth, titleBar.bounds.size.height))
-        title.text = self.peripheral!.name
+        title.text = self.peripheral.name
         title.textAlignment = .Center
         titleBar.addSubview(title)
         
         let backButton = UIButton(frame: CGRectMake(0, 0, backButtonWidth, titleBar.bounds.size.height))
         backButton.setTitle("Back", forState: .Normal)
         backButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        backButton.addTarget(self, action: Selector("popView"), forControlEvents: .TouchUpInside)
+        if selectionViewController != nil {
+            backButton.addTarget(self, action: Selector("popView"), forControlEvents: .TouchUpInside)
+        }
         titleBar.addSubview(backButton)
         
         view.addSubview(titleBar)
@@ -105,13 +113,17 @@ class DeviceViewController: UIViewController, BLEDelegate {
         guard let ble = ble else { return }
         while numButtons > 0 && readBuffer.length - index >= 55 {
             let range = NSRange(location: index, length: 55)
-            buttonLayout.addButton(ble, data: readBuffer.subdataWithRange(range))
+            let active = selectionViewController != nil
+            buttonLayout.addButton(ble, data: readBuffer.subdataWithRange(range), active: active)
             index += 55
             --numButtons!
         }
         if numButtons == 0 {
             print("[DEBUG] Recieved the layout")
-            buttonLayout.addToView(buttonView)
+            saveLayout()
+            if self.viewLoaded {
+                buttonLayout.addToView(buttonView)
+            }
         }
     }
     
