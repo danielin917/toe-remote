@@ -7,6 +7,29 @@
 import UIKit
 import CoreBluetooth
 
+class SelectionViewCell: UICollectionViewCell {
+    var textLabel: UILabel!
+    var buttonView: UIView!
+
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        textLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height/3))
+        textLabel.adjustsFontSizeToFitWidth = true
+        textLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+        textLabel.textAlignment = .Center
+        contentView.addSubview(textLabel)
+        
+        buttonView = UIView(frame: CGRect(x: 0, y: textLabel.frame.size.height, width: frame.size.width, height: frame.size.height*2/3))
+        contentView.addSubview(buttonView)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
 class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, BLEDelegate {
 
     var collectionView: UICollectionView!
@@ -27,7 +50,7 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.registerClass(SelectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(collectionView)
         
@@ -46,8 +69,13 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
-        cell.backgroundColor = UIColor.blackColor()
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! SelectionViewCell
+        assert(ble.peripherals.count > indexPath.item)
+        let peripheral = ble.peripherals[indexPath.item]
+        cell.textLabel.text = peripheral.name
+        if let layout = cachedLayouts[peripheral.identifier.UUIDString] {
+            layout.addToView(cell.buttonView)
+        }
         return cell
     }
     
@@ -56,7 +84,7 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         assert(ble.peripherals.count > indexPath.item)
         
         let peripheral = ble.peripherals[indexPath.item]
-        let deviceViewController = DeviceViewController(selectionViewController: self, ble: ble, peripheral: peripheral, buttonLayout: nil)
+        let deviceViewController = DeviceViewController(selectionViewController: self, ble: ble, peripheral: peripheral)
         self.presentViewController(deviceViewController, animated: true, completion: {();
             self.ble.delegate = deviceViewController
             self.ble.connectToPeripheral(peripheral)

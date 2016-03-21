@@ -13,23 +13,21 @@ typedef void (*button_func)();
 /*
  *Button settings specified by developer
  */
-struct Button {
-    static int next_id;
-    unsigned char id;
-    unsigned char size_x;
-    unsigned char size_y;
-    unsigned char grid_x;
-    unsigned char grid_y;
-    char *text;
-
-    Button(unsigned char _size_x, unsigned char _size_y, unsigned char _grid_x,
-           unsigned char _grid_y, char *_text)
-        : size_x(_size_x), size_y(_size_y), grid_x(_grid_x), grid_y(_grid_y)
-    {
-        char *buf = new char[50];
-        strncpy(buf, _text, 50);
-        text = buf;
-    }
+struct Button{
+	static int next_id;
+	unsigned char id;
+	unsigned char size_x;
+	unsigned char size_y;
+	unsigned char grid_x;
+	unsigned char grid_y;
+	char* text;
+	
+	Button(unsigned char _size_x, unsigned char _size_y, unsigned char _grid_x, unsigned char _grid_y, char* _text)
+	:size_x(_size_x), size_y(_size_y), grid_x(_grid_x), grid_y(_grid_y){
+		char * buf = new char[49];
+		strncpy(buf, _text, 49);
+		text = buf;
+	}
 };
 
 class ServerInterface {
