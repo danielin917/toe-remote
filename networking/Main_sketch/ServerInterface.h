@@ -16,25 +16,34 @@ typedef void (*button_func)();
 struct Button{
 	static int next_id;
 	unsigned char id;
-	unsigned char size_x;
-	unsigned char size_y;
-	unsigned char grid_x;
-	unsigned char grid_y;
+	unsigned char x;
+	unsigned char y;
+	unsigned char width;
+	unsigned char height;
 	char* text;
-	
-	Button(unsigned char _size_x, unsigned char _size_y, unsigned char _grid_x, unsigned char _grid_y, char* _text)
-	:size_x(_size_x), size_y(_size_y), grid_x(_grid_x), grid_y(_grid_y){
-		char * buf = new char[49];
-		strncpy(buf, _text, 49);
-		text = buf;
-	}
+
+        Button(unsigned char _x, unsigned char _y,
+               unsigned char _width, unsigned char _height, const char *_text)
+            : x(_x), y(_y), width(_width),
+              height(_height), text(nullptr)
+        {
+                char * buf = new char[49];
+                strncpy(buf, _text, 49);
+                text = buf;
+        }
+
+        ~Button()
+        {
+            if (text != nullptr)
+                delete text;
+        }
 };
 
 class ServerInterface {
     // BLEPeripheral
     BLEPeripheral *ble;
     // Broadcast Name
-    char *device_name;
+    char device_name[11] = "toe-device";
     // Storage for Buttons
     Vector<Button *> btn_vec;
     // Mapping from Index to Function
@@ -54,8 +63,8 @@ class ServerInterface {
      *Create and store new button
      *RETURNS: Button id for function on success, -1 on failure
      */
-    int create_button(unsigned char size_x, unsigned char size_y,
-                      unsigned char grid_x, unsigned char grid_y, char *text,
+    int create_button(unsigned char x, unsigned char y,
+                      unsigned char width, unsigned char height, char *text,
                       button_func func);
     /*
      *Sets the broadcast name for your device. Name can only be 10 characters

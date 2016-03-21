@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __BLEPeripheral__
+#define __BLEPeripheral__
 
 class BLEPeripheral {
 public:
@@ -20,3 +21,5 @@ public:
 private:
     void *impl;
 };
+
+#endif // __BLEPeripheral__

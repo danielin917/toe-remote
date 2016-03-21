@@ -3,7 +3,7 @@
 
 int Button::next_id = 0;
 
-ServerInterface::ServerInterface() : ble(nullptr), device_name(nullptr) {}
+ServerInterface::ServerInterface() : ble(nullptr) {}
 
 ServerInterface::~ServerInterface()
 {
@@ -11,8 +11,8 @@ ServerInterface::~ServerInterface()
         delete ble;
 }
 
-int ServerInterface::create_button(unsigned char size_x, unsigned char size_y,
-                                   unsigned char grid_x, unsigned char grid_y,
+int ServerInterface::create_button(unsigned char x, unsigned char y,
+                                   unsigned char width, unsigned char height,
                                    char *text, button_func func)
 {
     if (btn_vec.size() == 16)
@@ -20,7 +20,7 @@ int ServerInterface::create_button(unsigned char size_x, unsigned char size_y,
         /*more than 16 buttons not currently supported*/
         return -1;
     }
-    Button *btn = new Button(size_x, size_y, grid_x, grid_y, text);
+    Button *btn = new Button(x, y, width, height, text);
     btn_vec.push_back(btn);
     function_map.push_back(func);
     btn->id = Button::next_id++;
@@ -29,13 +29,13 @@ int ServerInterface::create_button(unsigned char size_x, unsigned char size_y,
 
 bool ServerInterface::set_device_name(const char *name)
 {
+    if (!name)
+        return false;
     strncpy(device_name, name, 10);
+    return true;
 }
 bool ServerInterface::start_server(/* parameters */)
 {
-    if (!device_name)
-        strncpy(device_name, "toe-device", 10);
-
     ble = new BLEPeripheral(device_name);
     return true;
 }
@@ -93,10 +93,10 @@ bool ServerInterface::send_layout()
     for (int i = 0; i < btn_vec.size(); i++)
     {
         buf[0] = btn_vec[i]->id;
-        buf[1] = btn_vec[i]->size_x;
-        buf[2] = btn_vec[i]->size_y;
-        buf[3] = btn_vec[i]->grid_x;
-        buf[4] = btn_vec[i]->grid_y;
+        buf[1] = btn_vec[i]->x;
+        buf[2] = btn_vec[i]->y;
+        buf[3] = btn_vec[i]->width;
+        buf[4] = btn_vec[i]->height;
         strncpy((char *)(buf + 5), btn_vec[i]->text, 49);
         ble->write(buf, 55);
         ble->process();

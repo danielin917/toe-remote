@@ -1,7 +1,7 @@
 #pragma once
-#include<Arduino.h>
-//#include <stdlib.h>
-//#include <string.h>
+#include <stddef.h>
+#include <string.h>
+
 template<typename T>
 class Vector{
 	T* array;
