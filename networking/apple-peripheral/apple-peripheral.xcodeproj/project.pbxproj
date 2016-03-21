@@ -12,6 +12,9 @@
 		014C64191C9A7EF300EDA26B /* libBLEPeripheral.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 014C63FE1C9A7DA500EDA26B /* libBLEPeripheral.dylib */; };
 		014C641B1C9A967E00EDA26B /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 014C641A1C9A967E00EDA26B /* CoreBluetooth.framework */; };
 		01A18D591C9DEC4300E16098 /* BLEPeripheralObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01A18D581C9DEC4300E16098 /* BLEPeripheralObjC.mm */; };
+		01A18D5C1C9F8DC900E16098 /* ServerInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01A18D5A1C9F8DC900E16098 /* ServerInterface.cpp */; };
+		01A18D5D1C9F8DC900E16098 /* ServerInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A18D5B1C9F8DC900E16098 /* ServerInterface.h */; };
+		01A18D5E1C9F8DEB00E16098 /* ServerInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01A18D5A1C9F8DC900E16098 /* ServerInterface.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +36,8 @@
 		014C640F1C9A7E9700EDA26B /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		014C641A1C9A967E00EDA26B /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		01A18D581C9DEC4300E16098 /* BLEPeripheralObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BLEPeripheralObjC.mm; sourceTree = "<group>"; };
+		01A18D5A1C9F8DC900E16098 /* ServerInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ServerInterface.cpp; path = ../Main_sketch/ServerInterface.cpp; sourceTree = "<group>"; };
+		01A18D5B1C9F8DC900E16098 /* ServerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerInterface.h; path = ../Main_sketch/ServerInterface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +63,8 @@
 		014C637F1C9A6DDA00EDA26B = {
 			isa = PBXGroup;
 			children = (
+				01A18D5A1C9F8DC900E16098 /* ServerInterface.cpp */,
+				01A18D5B1C9F8DC900E16098 /* ServerInterface.h */,
 				01A18D581C9DEC4300E16098 /* BLEPeripheralObjC.mm */,
 				014C641A1C9A967E00EDA26B /* CoreBluetooth.framework */,
 				014C638A1C9A6DDA00EDA26B /* apple-peripheral */,
@@ -117,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				014C64041C9A7DC600EDA26B /* BLEPeripheral.h in Headers */,
+				01A18D5D1C9F8DC900E16098 /* ServerInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +205,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01A18D5C1C9F8DC900E16098 /* ServerInterface.cpp in Sources */,
 				01A18D591C9DEC4300E16098 /* BLEPeripheralObjC.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -205,6 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01A18D5E1C9F8DEB00E16098 /* ServerInterface.cpp in Sources */,
 				014C64181C9A7EE600EDA26B /* test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -29,4 +29,3 @@ main.o: main.cpp
 
 clean:
 	rm -f proj2 *.o core.*
-
