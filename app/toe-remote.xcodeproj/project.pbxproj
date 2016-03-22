@@ -402,7 +402,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "toe-remote/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "eecs481.toe-remote";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -413,7 +415,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "toe-remote/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "eecs481.toe-remote";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -487,6 +491,7 @@
 				014C63721C9A49FC00EDA26B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		014C63731C9A49FC00EDA26B /* Build configuration list for PBXNativeTarget "toe-remoteTests" */ = {
 			isa = XCConfigurationList;
@@ -495,6 +500,7 @@
 				014C63751C9A49FC00EDA26B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		014C63761C9A49FC00EDA26B /* Build configuration list for PBXNativeTarget "toe-remoteUITests" */ = {
 			isa = XCConfigurationList;
@@ -503,6 +509,7 @@
 				014C63781C9A49FC00EDA26B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

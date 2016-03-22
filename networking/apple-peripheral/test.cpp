@@ -33,6 +33,6 @@ int main() {
     }
     server.start_server();
     while (true) {
-        sleep(1);
+        sleep(60);
     }
 }

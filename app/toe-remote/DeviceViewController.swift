@@ -7,7 +7,7 @@
 import UIKit
 import CoreBluetooth
 
-class DeviceViewController: UIViewController, BLEDelegate {
+class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
     var ble: BLE?
     var peripheral: CBPeripheral
     var buttonLayout: ButtonLayout?
@@ -18,6 +18,9 @@ class DeviceViewController: UIViewController, BLEDelegate {
     var selectionViewController: SelectionViewController?
     var viewLoaded: Bool
     var paused: Bool
+    var editButton: UIButton?
+    
+    var isEdit: Bool
     
     init(selectionViewController: SelectionViewController?, ble: BLE?, peripheral: CBPeripheral) {
         self.selectionViewController = selectionViewController
@@ -27,6 +30,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
         self.readBuffer = NSMutableData()
         self.index = 0
         self.viewLoaded = false
+        self.isEdit = false
         self.paused = false
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,6 +58,7 @@ class DeviceViewController: UIViewController, BLEDelegate {
     }
     
     func popView() {
+        stopEditing()
         self.dismissViewControllerAnimated(true, completion: {();
             guard let selectionViewController = self.selectionViewController else { return }
             self.ble?.delegate = selectionViewController
@@ -63,16 +68,37 @@ class DeviceViewController: UIViewController, BLEDelegate {
         })
     }
     
-    func selectButtonToEdit() {
-        
+    func didButtonPress(button: Button) {
+        if !isEdit {
+            let bytes: [UInt8] = [0x01, button.id]
+            ble?.write(data: NSData(bytes: bytes, length: 2))
+        }
+    }
+    
+    func stopEditing() {
+        guard isEdit else { return }
+        isEdit = false
+        editButton?.setTitle("Edit", forState: .Normal)
+        if let buttonView = buttonView {
+            buttonLayout?.makeThumbnail(buttonView)
+        }
+        saveLayout()
+        buttonLayout?.edit(false)
     }
     
     func startEditing() {
-        buttonLayout?.setTargetAction(self, action: Selector("selectButtonToEdit"))
+        guard !isEdit else { return }
+        isEdit = true
+        editButton?.setTitle("Done", forState: .Normal)
+        buttonLayout?.edit(true)
     }
     
-    func finishEditing() {
-        buttonLayout?.setTargetAction(nil, action: nil)
+    func editButtonPressed() {
+        if !isEdit {
+            startEditing()
+        } else {
+            stopEditing()
+        }
     }
     
     func addTitleView(view: UIView) {
@@ -95,13 +121,13 @@ class DeviceViewController: UIViewController, BLEDelegate {
         }
         titleBar.addSubview(backButton)
         
-        let editButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
-        editButton.setTitle("Edit", forState: .Normal)
-        editButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        editButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
+        editButton!.setTitle("Edit", forState: .Normal)
+        editButton!.setTitleColor(UIColor.blueColor(), forState: .Normal)
         if selectionViewController != nil {
-            editButton.addTarget(self, action: Selector("edit"), forControlEvents: .TouchUpInside)
+            editButton!.addTarget(self, action: Selector("editButtonPressed"), forControlEvents: .TouchUpInside)
         }
-        titleBar.addSubview(editButton)
+        titleBar.addSubview(editButton!)
         
         view.addSubview(titleBar)
     }
@@ -143,11 +169,10 @@ class DeviceViewController: UIViewController, BLEDelegate {
             numButtons = UnsafePointer<UInt8>(readBuffer.bytes).memory
             ++index
         }
-        guard let ble = ble else { return }
         while numButtons > 0 && readBuffer.length - index >= 55 {
             let range = NSRange(location: index, length: 55)
             let active = selectionViewController != nil
-            buttonLayout.addButton(ble, data: readBuffer.subdataWithRange(range), active: active)
+            buttonLayout.addButton(self, data: readBuffer.subdataWithRange(range), active: active)
             index += 55
             --numButtons!
         }
