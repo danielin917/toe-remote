@@ -58,3 +58,8 @@ unsigned char BLEPeripheral::bytes_available() {
 bool BLEPeripheral::connected() {
   return ble_connected();
 }
+
+BLEPeripheral::~BLEPeripheral()
+{
+	
+}

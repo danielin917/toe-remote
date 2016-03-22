@@ -47,7 +47,7 @@ class ServerInterface
     // BLEPeripheral
     BLEPeripheral *ble;
     // Broadcast Name
-    char device_name[11] = "toe-device";
+    char device_name[11];
     // Storage for Buttons
     Vector<Button *> btn_vec;
     // Mapping from Index to Function
@@ -107,6 +107,7 @@ template <typename Callable>
 ServerInterface<Callable>::ServerInterface()
     : ble(nullptr)
 {
+	strncpy(device_name, "toe-device", 10);
 }
 
 template <typename Callable>
