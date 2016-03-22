@@ -1,5 +1,6 @@
 #include "BLEPeripheral.h"
 
+#include <cassert>
 #include <Arduino.h>
 #include <RBL_services.h>
 #include <RBL_nRF8001.h>
@@ -37,6 +38,14 @@ void BLEPeripheral::write(const unsigned char *data, unsigned char len) {
 
 void BLEPeripheral::process() {
   ble_do_events();
+}
+
+bool BLEPeripheral::allows_async() { return false; }
+
+void BLEPeripheral::register_read_handler(void *, read_handler_t)
+{
+    Serial.print("Not supported.");
+    abort();
 }
 
 unsigned char BLEPeripheral::read_byte() {

@@ -22,6 +22,9 @@ static NSInteger MAX_CHUNK_SIZE = 64;
 @property (nonatomic, readwrite) NSUInteger sendDataIndex;
 @property (nonatomic, readwrite) NSUInteger numSubscribers;
 
+@property (nonatomic, readwrite) read_handler_t readHandler;
+@property (nonatomic, readwrite) void *serverInterface;
+
 
 - (void) send;
 - (void) write:(NSData *)data;
@@ -48,20 +51,21 @@ void BLEPeripheral::write(const unsigned char *data, unsigned char len) {
 
 void BLEPeripheral::process() {}
 
+bool BLEPeripheral::allows_async() { return true; }
+
+void BLEPeripheral::register_read_handler(void *serverInterface, read_handler_t readHandler) {
+    ((__bridge BLEPeripheralImpl*)impl).serverInterface = serverInterface;
+    ((__bridge BLEPeripheralImpl*)impl).readHandler = readHandler;
+}
+
 unsigned char BLEPeripheral::read_byte() {
-    BLEPeripheralImpl *p = (__bridge BLEPeripheralImpl*)impl;
-    assert(p.readBuffer.length > p.readBufferIndex);
-    unsigned char byte = ((unsigned char*)p.readBuffer.mutableBytes)[p.readBufferIndex++];
-    if (p.readBuffer.length == p.readBufferIndex) {
-        [p.readBuffer setLength:0];
-        p.readBufferIndex = 0;
-    }
-    return byte;
+    NSLog(@"Not supported");
+    exit(1);
 }
 
 unsigned char BLEPeripheral::bytes_available() {
-    BLEPeripheralImpl *p = (__bridge BLEPeripheralImpl*)impl;
-    return p.readBuffer.length - p.readBufferIndex;
+    NSLog(@"Not supported");
+    exit(1);
 }
 
 bool BLEPeripheral::connected() {
@@ -80,6 +84,9 @@ bool BLEPeripheral::connected() {
         self.serviceName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
         
         self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+        
+        self.readHandler = nullptr;
+        self.serverInterface = nullptr;
     }
     return self;
 }
@@ -161,6 +168,17 @@ bool BLEPeripheral::connected() {
     for (CBATTRequest *request in requests) {
         NSLog(@"[DEBUG] Sent data: %@", [request.value description]);
         [self.readBuffer appendData:request.value];
+    }
+    if (self.readHandler != nullptr) {
+        NSData *d = [[NSData alloc] initWithBytes:(void*)((unsigned char*)self.readBuffer.bytes + self.readBufferIndex) length:self.readBuffer.length -self.readBufferIndex];
+        NSLog(@"[DEBUG] Passing data to callback: %@", [d description]);
+        self.readBufferIndex += self.readHandler(self.serverInterface,
+            (unsigned char*)self.readBuffer.bytes + self.readBufferIndex,
+            self.readBuffer.length - self.readBufferIndex);
+        if (self.readBufferIndex == self.readBuffer.length) {
+            [self.readBuffer setLength:0];
+            self.readBufferIndex = 0;
+        }
     }
     [peripheral respondToRequest:requests[0] withResult:CBATTErrorSuccess];
 }

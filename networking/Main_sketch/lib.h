@@ -13,8 +13,10 @@ class Vector{
 	void grow()
 	{
 		T* creation = new T[length * 2];
-		memcpy(creation, array, length*sizeof(T));
-		delete [] array;
+        for (unsigned i = 0; i < length; ++i) {
+            creation[i] = array[i];
+        }
+        delete [] array;
 		array = creation;
 		length *= 2;
 	}

@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdint.h>
 
+namespace toe {
+
 /*
  *button functions defined as function pointers
  */
@@ -13,7 +15,8 @@ typedef void (*button_func)();
 /*
  *Button settings specified by developer
  */
-struct Button{
+class Button{
+public:
 	static int next_id;
 	unsigned char id;
 	unsigned char x;
@@ -49,6 +52,9 @@ class ServerInterface
     Vector<Button *> btn_vec;
     // Mapping from Index to Function
     Vector<Callable> function_map;
+    
+    static unsigned async_process(void *, const unsigned char *data, unsigned len);
+
     /*
      *Send layout of buttons
      */
@@ -141,7 +147,37 @@ template <typename Callable>
 bool ServerInterface<Callable>::start_server(/* parameters */)
 {
     ble = new BLEPeripheral(device_name);
+    if (ble->allows_async()) {
+        ble->register_read_handler((void*)this, &async_process);
+    }
     return true;
+}
+
+template <typename Callable>
+unsigned ServerInterface<Callable>::async_process(void *self_, const unsigned char *data, unsigned len) {
+    ServerInterface *self = (ServerInterface *)self_;
+    unsigned bytes_processed = 0;
+    while (len >= 2) {
+        unsigned char cmd;
+        unsigned char func_index;
+        cmd = *data++;
+        func_index = *data++;
+        switch (cmd)
+        {
+            case 0x00:
+                /* do response for layout */
+                self->send_layout();
+                break;
+            case 0x01:
+                self->call_function(func_index);
+                break;
+            default:
+                break;
+        }
+        bytes_processed += 2;
+        len -= 2;
+    }
+    return bytes_processed;
 }
 
 template <typename Callable>
@@ -149,6 +185,9 @@ bool ServerInterface<Callable>::process_command()
 {
     if (!ble)
     {
+        return false;
+    }
+    if (ble->allows_async()) {
         return false;
     }
     ble->process();
@@ -211,4 +250,6 @@ bool ServerInterface<Callable>::send_layout()
     }
     return true;
 
+}
+    
 }

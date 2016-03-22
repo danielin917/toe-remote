@@ -1,24 +1,30 @@
 #include "../Main_sketch/ServerInterface.h"
-#include "BLEPeripheral.h"
+#include "SimulateKeypress.h"
+#include "Keycodes.h"
 
 #include <array>
 #include <vector>
 #include <iostream>
 
-void a() { std::cout << "Button A pressed" << std::endl; }
-void b() { std::cout << "Button B pressed" << std::endl; }
-void c() { std::cout << "Button C pressed" << std::endl; }
-void r() { std::cout << "Button Rest pressed" << std::endl; }
+using namespace keycodes;
 
 int main() {
     const char *name = "test-app";
-    const std::array<Button, 4> buttons = {
-        Button{0, 0, 30, 30, "Button A"},
-        Button{33, 0, 30, 30, "Button B"},
-        Button{66, 0, 30, 30, "Button C"},
-        Button{0, 33, 100, 67, "The Rest of the Screen"}};
-    const std::vector<button_func> funcs = {&a, &b, &c, &r};
-    ServerInterface<button_func> server;
+    const std::array<toe::Button, 5> buttons = {
+        toe::Button{0,  33, 33, 33, "Left"},
+        toe::Button{66, 33, 33, 33, "Right"},
+        toe::Button{33, 0,  33, 33, "Up"},
+        toe::Button{33, 66, 33, 33, "Down"},
+        toe::Button{80, 0,  20, 20, "New Game"}};
+    const std::array<SimulateKeypress, 5> funcs = {
+        SimulateKeypress{kVK_LeftArrow},
+        SimulateKeypress{kVK_RightArrow},
+        SimulateKeypress{kVK_UpArrow},
+        SimulateKeypress{kVK_DownArrow},
+        SimulateKeypress{kVK_ANSI_R}
+    };
+    
+    toe::ServerInterface<SimulateKeypress> server;
     server.set_device_name(name);
     for (unsigned i = 0; i < buttons.size(); ++i) {
         const auto &button = buttons[i];
@@ -27,7 +33,6 @@ int main() {
     }
     server.start_server();
     while (true) {
-        while (server.process_command()) {}
         sleep(1);
     }
 }

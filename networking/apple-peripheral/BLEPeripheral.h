@@ -1,6 +1,8 @@
 #ifndef __BLEPeripheral__
 #define __BLEPeripheral__
 
+using read_handler_t = unsigned(*)(void *, const unsigned char *, unsigned);
+
 class BLEPeripheral {
 public:
   BLEPeripheral(const char *name);
@@ -11,6 +13,10 @@ public:
   void write(const unsigned char *data, unsigned char len);
 
   void process();
+    
+  static bool allows_async();
+    
+  void register_read_handler(void *, read_handler_t);
 
   unsigned char read_byte();
 
