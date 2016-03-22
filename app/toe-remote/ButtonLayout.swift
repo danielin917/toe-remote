@@ -170,7 +170,6 @@ class Button: NSObject {
         guard let superview = button.superview else { return }
         switch resizeGR.state {
         case .Began:
-            print("resize began")
             startX = normalize(superview.bounds.width, percent: x)
             startY = normalize(superview.bounds.height, percent: y)
             startWidth = normalize(superview.bounds.width, percent: width)
@@ -178,7 +177,6 @@ class Button: NSObject {
             superview.bringSubviewToFront(button)
             break
         case .Changed:
-            print("resize changed")
             let scale = boundScale(resizeGR.scale)
             resizeGR.scale = scale
             let dx = (button.frame.width - scale*button.frame.width) / 2
@@ -186,7 +184,6 @@ class Button: NSObject {
             button.frame = CGRectMake(startX! + dx, startY! + dy, startWidth! - 2*dx, startHeight! - 2*dy)
             break
         case .Ended:
-            print("resize ended")
             let scale = boundScale(resizeGR.scale)
             resizeGR.scale = scale
             let dx = (button.frame.width - scale*button.frame.width) / 2

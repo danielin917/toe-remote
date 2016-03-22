@@ -29,6 +29,7 @@ static NSInteger MAX_CHUNK_SIZE = 64;
 - (void) send;
 - (void) write:(NSData *)data;
 - (void) advertise:(BOOL)shouldAdvertise;
+- (void) cleanup;
 
 @end
 
@@ -38,7 +39,8 @@ BLEPeripheral::BLEPeripheral(const char *name) : impl((__bridge_retained void*)[
 
 BLEPeripheral::~BLEPeripheral() {
     NSLog(@"Destroyed");
-    (__bridge_transfer BLEPeripheralImpl*)impl;
+    BLEPeripheralImpl *_impl = (__bridge_transfer BLEPeripheralImpl*)impl;
+    [_impl cleanup];
 }
 
 void BLEPeripheral::write_byte(unsigned char data) {
@@ -213,6 +215,10 @@ bool BLEPeripheral::connected() {
         NSLog(@"Sent: %@", [chunk description]);
         self.sendDataIndex += length;
     }
+}
+
+- (void) cleanup {
+    [self.peripheralManager removeAllServices];
 }
 
 
