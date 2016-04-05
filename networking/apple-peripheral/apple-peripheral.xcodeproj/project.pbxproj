@@ -466,6 +466,7 @@
 				01A18D9A1CA0A4E800E16098 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
