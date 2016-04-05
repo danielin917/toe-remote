@@ -24,15 +24,27 @@ public:
 	unsigned char width;
 	unsigned char height;
 	char* text;
-
+	char* image;
+	
         Button(unsigned char _x, unsigned char _y,
                unsigned char _width, unsigned char _height, const char *_text)
             : x(_x), y(_y), width(_width),
               height(_height), text(nullptr)
         {
                 text = new char[50];
-                strncpy(text, _text, 50);
-        }
+		strncpy(text, _text, 49);
+	}
+        Button(unsigned char _x, unsigned char _y,
+               unsigned char _width, unsigned char _height, const char *_text,
+		const char* _image)
+            : x(_x), y(_y), width(_width),
+              height(_height), text(nullptr), image(nullptr)
+        {
+                text = new char[50];
+                image = new char[256];
+		strncpy(text, _text, 49);
+        	strncpy(image, _image, 255);
+	}
 
         ~Button()
         {
@@ -238,7 +250,7 @@ bool ServerInterface<Callable>::send_layout()
     unsigned char num_buttons = (unsigned char)btn_vec.size();
     ble->write(&num_buttons, 1);
 
-    unsigned char buf[55];
+    unsigned char buf[312];
     for (int i = 0; i < btn_vec.size(); i++)
     {
         buf[0] = btn_vec[i]->id;
@@ -246,8 +258,19 @@ bool ServerInterface<Callable>::send_layout()
         buf[2] = btn_vec[i]->y;
         buf[3] = btn_vec[i]->width;
         buf[4] = btn_vec[i]->height;
-        strncpy((char *)(buf + 5), btn_vec[i]->text, 50);
-        ble->write(buf, 55);
+	
+	/*If image being used send length*/
+	unsigned char image_len = 0;
+        if(btn_vec[i]->image)
+		image_len = (unsigned char)strlen(btn_vec[i]->image);
+	buf[5] = image_len;	
+	
+	/*Copy in all strings*/	
+	strncpy((char *)(buf + 6), btn_vec[i]->text, 49);
+	if(image_len)
+		strncpy((char*)(buf + 56), btn_vec[i]->image, 255);		
+	
+	ble->write(buf, 312);
         ble->process();
     }
     return true;
