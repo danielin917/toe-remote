@@ -1,10 +1,11 @@
 #include "../Main_sketch/ServerInterface.h"
-#include "SimulateKeypress.h"
 #include "Keycodes.h"
+#include "SimulateKeypress.h"
 
 #include <array>
-#include <vector>
 #include <iostream>
+#include <thread>
+#include <vector>
 
 using namespace keycodes;
 
@@ -17,13 +18,10 @@ int main() {
         toe::Button{33, 66, 33, 33, "Down"},
         toe::Button{80, 0,  20, 20, "New Game"}};
     const std::array<SimulateKeypress, 5> funcs = {
-        SimulateKeypress{kVK_LeftArrow},
-        SimulateKeypress{kVK_RightArrow},
-        SimulateKeypress{kVK_UpArrow},
-        SimulateKeypress{kVK_DownArrow},
-        SimulateKeypress{kVK_ANSI_R}
-    };
-    
+        SimulateKeypress{kVK_LeftArrow}, SimulateKeypress{kVK_RightArrow},
+        SimulateKeypress{kVK_UpArrow}, SimulateKeypress{kVK_DownArrow},
+        SimulateKeypress{kVK_ANSI_R}};
+
     toe::ServerInterface<SimulateKeypress> server;
     server.set_device_name(name);
     for (unsigned i = 0; i < buttons.size(); ++i) {
@@ -33,6 +31,6 @@ int main() {
     }
     server.start_server();
     while (true) {
-        sleep(1);
+        std::this_thread::sleep_for(std::chrono::seconds{60});
     }
 }

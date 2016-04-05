@@ -260,7 +260,6 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         
         print("[DEBUG] Found services for peripheral: \(peripheral.identifier.UUIDString)")
         
-        
         for service in peripheral.services! {
             let theCharacteristics = [CBUUID(string: RBL_CHAR_RX_UUID), CBUUID(string: RBL_CHAR_TX_UUID)]
             

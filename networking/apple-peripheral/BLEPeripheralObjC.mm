@@ -27,18 +27,20 @@ static NSInteger MAX_CHUNK_SIZE = 64;
 
 
 - (void) send;
-- (void) write:(NSData *)data;
+- (void)write:(NSData *)data;
 - (void) advertise:(BOOL)shouldAdvertise;
+- (void) cleanup;
 
 @end
 
 @implementation BLEPeripheralImpl
 
-BLEPeripheral::BLEPeripheral(const char *name) : impl((__bridge_retained void*)[[BLEPeripheralImpl alloc] init: name]) { }
+BLEPeripheral::BLEPeripheral(const char *name) : impl((__bridge_retained void*)[[BLEPeripheralImpl alloc] initWithServiceName: [NSString stringWithCString:name encoding:NSUTF8StringEncoding]]) { }
 
 BLEPeripheral::~BLEPeripheral() {
     NSLog(@"Destroyed");
-    (__bridge_transfer BLEPeripheralImpl*)impl;
+    BLEPeripheralImpl *_impl = (__bridge_transfer BLEPeripheralImpl*)impl;
+    [_impl cleanup];
 }
 
 void BLEPeripheral::write_byte(unsigned char data) {
@@ -72,7 +74,7 @@ bool BLEPeripheral::connected() {
     return ((__bridge BLEPeripheralImpl*)impl).numSubscribers > 0;
 }
 
-- (id) init:(const char *) name {
+- (id) initWithServiceName:(NSString *)name {
     self = [super init];
     if (self) {
         NSLog(@"Initializaing");
@@ -81,7 +83,7 @@ bool BLEPeripheral::connected() {
         self.readBufferIndex = 0;
         self.dataToSend = [[NSMutableData alloc] init];
         self.readBuffer = [[NSMutableData alloc] init];
-        self.serviceName = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+        self.serviceName = name;
         
         self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
         
@@ -213,6 +215,10 @@ bool BLEPeripheral::connected() {
         NSLog(@"Sent: %@", [chunk description]);
         self.sendDataIndex += length;
     }
+}
+
+- (void) cleanup {
+    [self.peripheralManager removeAllServices];
 }
 
 
