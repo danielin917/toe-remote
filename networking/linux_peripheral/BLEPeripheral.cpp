@@ -1,39 +1,49 @@
+// STL includes
 #include <iostream>
 #include <vector>
+
+// Qt includes
 #include <QString>
 #include <QLowEnergyController>
+#include <QLowEnergyAdvertisingData>
+#include <QLowEnergyAdvertisingParameters>
+#include <QLowEnergyService>
+#include <QLowEnergyServiceData>
+#include <QLowEnergyCharacteristic>
+#include <QLowEnergyCharacteristicData>
 #include <QBluetoothLocalDevice>
 #include <QBluetoothUuid>
 #include <QByteArray>
-using namespace QBlueTooth;
-using QString;
 
-constexpr QString RBL_SERVICE_UUID(QStringLiteral("713D0000-503E-4C75-BA94-3148F18D941E"));
+// Toe Remote includes
+#include "BLEPeripheral.h"
+
+const QBluetoothUuid RBL_SERVICE_UUID(QStringLiteral("713D0000-503E-4C75-BA94-3148F18D941E"));
 // For sending data
-constexpr QString RBL_CHAR_TX_UUID(QStringLiteral("713D0002-503E-4C75-BA94-3148F18D941E"));
+const QBluetoothUuid RBL_CHAR_TX_UUID(QStringLiteral("713D0002-503E-4C75-BA94-3148F18D941E"));
 // For receiving data
-constexpr QString RBL_CHAR_RX_UUID(QStringLiteral("713D0003-503E-4C75-BA94-3148F18D941E"));
+const QBluetoothUuid RBL_CHAR_RX_UUID(QStringLiteral("713D0003-503E-4C75-BA94-3148F18D941E"));
 int MAX_CHUNK_SIZE = 64;
 
-class BLEPeripheral_Impl : public QObject
+class BLEPer_Impl : public QObject
 {
 	Q_OBJECT
+	
 	friend class BLEPeripheral;
+ 
  private:
-	BLEPeripheral_Impl(QObject *parent = 0, const char *name);
-	~BLEPeripheral_Impl();
+	BLEPer_Impl(const char *name);
+	~BLEPer_Impl();
 	
 	unsigned int numConnected;
-	unsigned int bytes_sent;
-	unsigned int readIdx;
+	int bytes_sent;
+	int readIdx;
 	QByteArray *sendBuffer;
 	QByteArray *readBuffer;
 	
 	QString peripheralName;
 	QBluetoothLocalDevice *btDevice;
 	QLowEnergyController *peripheralController;
-	QLowEnergyCharacteristic *readCharacteristic;
-	QLowEnergyCharacteristic *writeCharacteristic;
 	QLowEnergyService *RBLService;
 	
 	read_handler_t readHandler;
@@ -50,13 +60,13 @@ class BLEPeripheral_Impl : public QObject
 
 BLEPeripheral::BLEPeripheral(const char *name)
 {
-	(BLEPeripheral_Impl *) impl = new BLEPeripheral_Impl
+	impl = new BLEPer_Impl(name);
 }
 
 BLEPeripheral::~BLEPeripheral()
 {
 	std::cerr << "Destroyed" << std::endl;
-	delete (BLEPeripheral_Impl *) impl;
+	delete static_cast<BLEPer_Impl *>(impl);
 }
 
 void BLEPeripheral::write_byte(unsigned char data)
@@ -66,7 +76,7 @@ void BLEPeripheral::write_byte(unsigned char data)
 
 void BLEPeripheral::write(const unsigned char *data, unsigned char len)
 {
-	(BLEPeripheral_Impl *)impl->write(data, len);
+	static_cast<BLEPer_Impl *>(impl)->write(data, len);
 }
 
 void BLEPeripheral::process()
@@ -74,15 +84,16 @@ void BLEPeripheral::process()
 	// Empty
 }
 
-static bool BLEPeripheral::allows_async()
+bool BLEPeripheral::allows_async()
 {
 	return true;
 }
 
-void register_read_handler(void *serverInterface, read_handler_t readHandler)
+void BLEPeripheral::register_read_handler
+(void *serverInterface, read_handler_t readHandler)
 {
-	this->serverInterface = serverInterface;
-	this->readHandler = readHandler;
+	static_cast<BLEPer_Impl *>(impl)->serverInterface = serverInterface;
+	static_cast<BLEPer_Impl *>(impl)->readHandler = readHandler;
 }
 
 unsigned char BLEPeripheral::read_byte()
@@ -99,12 +110,13 @@ unsigned char BLEPeripheral::bytes_available()
 
 bool BLEPeripheral::connected()
 {
-	return (BLEPeripheral_Impl.numConnected > 0);
+	return (static_cast<BLEPer_Impl *>(impl)->numConnected > 0);
 }
 
-BLEPeripheral_Impl::BLEPeripheral_Impl(const char *name)
+BLEPer_Impl::BLEPer_Impl(const char *name)
 {
 	std::cerr << "Initializing" << std::endl;
+	this->setParent(Q_NULLPTR);
 	numConnected = 0;
 	readIdx = 0;
 	bytes_sent = 0;
@@ -119,7 +131,7 @@ BLEPeripheral_Impl::BLEPeripheral_Impl(const char *name)
 	
 	// Allocate the peripheral controller and connect the peripheralController's
 	// connected() and disconnected() signals to the appropriate slots
-	peripheralController = createPeripheral(btDevice);
+	peripheralController = QLowEnergyController::createPeripheral(btDevice);
 	QObject::connect(peripheralController, SIGNAL(peripheralController->connected()),
 					this, SLOT(deviceConnect()));
 	QObject::connect(peripheralController, SIGNAL(peripheralController->disconnected()),
@@ -130,23 +142,20 @@ BLEPeripheral_Impl::BLEPeripheral_Impl(const char *name)
 	// Initialize data for RBLService
 	QLowEnergyServiceData mainSvc;
 	mainSvc.setType(QLowEnergyServiceData::ServiceTypePrimary);
-	mainSvc.setUuid(QBluetoothUuid(RBL_SERVICE_UUID));
+	mainSvc.setUuid(RBL_SERVICE_UUID);
 	
 	// Create Tx and Rx characteristics and add them to the RBL service
 	QLowEnergyCharacteristicData TxChar;
-	TxChar.setUuid(QBluetoothUuid(RBL_CHAR_TX_UUID));
+	TxChar.setUuid(RBL_CHAR_TX_UUID);
 	TxChar.setProperties(QLowEnergyCharacteristic::Read | QLowEnergyCharacteristic::Notify);
 	QLowEnergyCharacteristicData RxChar;
-	RxChar.setUuid(QBluetoothUuid(RBL_CHAR_RX_UUID));
+	RxChar.setUuid(RBL_CHAR_RX_UUID);
 	RxChar.setProperties(QLowEnergyCharacteristic::WriteNoResponse);
-	mainSvc.setCharacteristics{RxChar, TxChar};
+	mainSvc.setCharacteristics({RxChar, TxChar});
 	
 	// Add the RBL service to the peripheral
 	RBLService = peripheralController->addService(mainSvc, peripheralController);
-	assert(RBLService->parent() == peripheralController);
-	
-	readCharacteristic = &(RBLService->characteristic(QBluetoothUuid(RBL_CHAR_RX_UUID)));
-	writeCharacteristic = &(RBLService->characteristic(QBluetoothUuid(RBL_CHAR_TX_UUID)));
+	Q_ASSERT(RBLService->parent() == peripheralController);
 	
 	QObject::connect(RBLService, SIGNAL(RBLService->characteristicChanged(const QLowEnergyCharacteristic &, const QByteArray &)),
 					this, SLOT(this->dataReceived(const QLowEnergyCharacteristic &, const QByteArray &)));
@@ -155,19 +164,19 @@ BLEPeripheral_Impl::BLEPeripheral_Impl(const char *name)
 	setAdvertise(true);
 }
 
-BLEPeripheral_Impl::~BLEPeripheral_Impl()
+BLEPer_Impl::~BLEPer_Impl()
 {
 	delete sendBuffer;
 	delete readBuffer;
 }
 
-void BLEPeripheral_Impl::setAdvertise(bool shouldAdvertise = true)
+void BLEPer_Impl::setAdvertise(bool shouldAdvertise)
 {
 	if (shouldAdvertise) {
 		QLowEnergyAdvertisingData advertData;
 		advertData.setDiscoverability(QLowEnergyAdvertisingData::DiscoverabilityGeneral);
 		advertData.setLocalName(peripheralName);
-		advertData.setServices{QBluetoothUuid(RBL_SERVICE_UUID)};
+		advertData.setServices({RBL_SERVICE_UUID});
 		peripheralController->startAdvertising(QLowEnergyAdvertisingParameters(), advertData);
 		std::cerr << "Started advertising" << std::endl;
 	}
@@ -177,39 +186,51 @@ void BLEPeripheral_Impl::setAdvertise(bool shouldAdvertise = true)
 	}
 }
 
-void BLEPeripheral_Impl::send()
+void BLEPer_Impl::send()
 {
+	const QLowEnergyCharacteristic &writeCharacteristic = RBLService->characteristic(RBL_CHAR_TX_UUID);
 	while (bytes_sent < sendBuffer->size())
 	{
-		unsigned length = sendBuffer->size() - bytes_sent;
+		int length = sendBuffer->size() - bytes_sent;
 		length = (length > MAX_CHUNK_SIZE) ? MAX_CHUNK_SIZE : length;
 		QByteArray chunk(sendBuffer->mid(bytes_sent, length));
-		RBLService->writeCharacteristic(*writeCharacteristic, chunk);
+		RBLService->writeCharacteristic(writeCharacteristic, chunk);
 		bytes_sent += length;
 	}
 }
 
-void BLEPeripheral_Impl::write(const unsigned char *data, unsigned char len)
+void BLEPer_Impl::write(const unsigned char *data, unsigned char len)
 {
 	if (numConnected == 0) {
 		std::cerr << "No subscribers connected" << std::endl;
 		return;
 	}
-	if (bytes_sent < sendBuffer->size()) {
-		sendBuffer->append(data, len);
-		return;
-	}
-	bytes_sent = 0;
-	sendBuffer->swap(QByteArray(data, len));
+	sendBuffer->append(reinterpret_cast<const char *>(data), len);
 	send();
 }
 
-void BLEPeripheral_Impl::dataReceived(const QLowEnergyCharacteristic &characteristic, const QByteArray &data)
+void BLEPer_Impl::dataReceived(const QLowEnergyCharacteristic &characteristic, const QByteArray &data)
 {
-	if (characteristic == *readCharacteristic) {
-		
+	const QLowEnergyCharacteristic &readCharacteristic = RBLService->characteristic(RBL_CHAR_RX_UUID);
+	if (characteristic == readCharacteristic) {
+		if (readHandler == Q_NULLPTR) {
+			std::cerr << "No read was handler set" << std::endl;
+			return;
+		}
+		readBuffer->append(data);
+		readIdx += readHandler
+		(
+			serverInterface, 
+			reinterpret_cast<const unsigned char*>(readBuffer->data()) + readIdx,
+			readBuffer->size() - readIdx
+		);
+		if (readIdx == readBuffer->size())
+		{
+			readIdx = 0;
+			readBuffer->clear();
+		}
 	}
 }
 
-
+#include "BLEPeripheral.moc"
 
