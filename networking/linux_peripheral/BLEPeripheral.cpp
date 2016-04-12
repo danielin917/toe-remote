@@ -3,8 +3,11 @@
 #include <vector>
 
 // Qt includes
+#include <QObject>
 #include <QString>
+#include <QtDebug>
 #include <QLowEnergyController>
+#include <QBluetoothHostInfo>
 #include <QLowEnergyAdvertisingData>
 #include <QLowEnergyAdvertisingParameters>
 #include <QLowEnergyService>
@@ -56,6 +59,7 @@ class BLEPer_Impl : public QObject
 	void setAdvertise(bool shouldAdvertise = true);
 	void deviceConnect() { numConnected += 1; }
 	void deviceDisconnect() { numConnected -= 1; }
+	void printError(QLowEnergyController::Error error);
 };
 
 BLEPeripheral::BLEPeripheral(const char *name)
@@ -125,19 +129,30 @@ BLEPer_Impl::BLEPer_Impl(const char *name)
 	sendBuffer = new QByteArray();
 	
 	// Initialize btDevice with default local Bluetooth device
-	btDevice = new QBluetoothLocalDevice(QBluetoothAddress(), this);
+	//QBluetoothAddress(QStringLiteral("5C:F3:70:72:5B:C6")), 
+	btDevice = new QBluetoothLocalDevice(QBluetoothAddress(QStringLiteral("5C:F3:70:72:5B:C6")), this);
+	
+	/*
+	auto deviceList = QBluetoothLocalDevice::allDevices();
+	if (deviceList.size() == 0) {
+		qFatal("No local Bluetooth adaptors found.");
+	}
+	*/
+	if (!btDevice->isValid()) {
+		qFatal("Default Bluetooth device was not detected.");
+	}
+	
 	// If the device is not powered on, power it on
 	btDevice->setHostMode(QBluetoothLocalDevice::HostConnectable);
 	
 	// Allocate the peripheral controller and connect the peripheralController's
 	// connected() and disconnected() signals to the appropriate slots
 	peripheralController = QLowEnergyController::createPeripheral(btDevice);
-	QObject::connect(peripheralController, SIGNAL(peripheralController->connected()),
-					this, SLOT(deviceConnect()));
-	QObject::connect(peripheralController, SIGNAL(peripheralController->disconnected()),
-					this, SLOT(deviceDisconnect()));
-	QObject::connect(peripheralController, SIGNAL(peripheralController->disconnected()), 
-					this, SLOT(setAdvertise()));
+	qDebug() << peripheralController->localAddress();
+	QObject::connect(peripheralController, SIGNAL(connected()),	this, SLOT(deviceConnect()));
+	QObject::connect(peripheralController, SIGNAL(disconnected()), this, SLOT(deviceDisconnect()));
+	QObject::connect(peripheralController, SIGNAL(disconnected()), this, SLOT(setAdvertise()));
+	QObject::connect(peripheralController, SIGNAL(error(QLowEnergyController::Error)), this, SLOT(printError(QLowEnergyController::Error)));
 	
 	// Initialize data for RBLService
 	QLowEnergyServiceData mainSvc;
@@ -157,8 +172,13 @@ BLEPer_Impl::BLEPer_Impl(const char *name)
 	RBLService = peripheralController->addService(mainSvc, peripheralController);
 	Q_ASSERT(RBLService->parent() == peripheralController);
 	
-	QObject::connect(RBLService, SIGNAL(RBLService->characteristicChanged(const QLowEnergyCharacteristic &, const QByteArray &)),
-					this, SLOT(this->dataReceived(const QLowEnergyCharacteristic &, const QByteArray &)));
+	QObject::connect
+	(
+		RBLService, 
+		SIGNAL(characteristicChanged(const QLowEnergyCharacteristic &, const QByteArray &)), 
+		this, 
+		SLOT(dataReceived(const QLowEnergyCharacteristic &, const QByteArray &))
+	);
 	
 	// Start advertising
 	setAdvertise(true);
@@ -230,6 +250,12 @@ void BLEPer_Impl::dataReceived(const QLowEnergyCharacteristic &characteristic, c
 			readBuffer->clear();
 		}
 	}
+}
+
+void BLEPer_Impl::printError(QLowEnergyController::Error error)
+{
+	std::cerr << "Error encountered: " << std::endl;
+	qWarning() << peripheralController->errorString();
 }
 
 #include "BLEPeripheral.moc"
