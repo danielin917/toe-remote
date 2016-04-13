@@ -40,7 +40,7 @@ public:
         Button(unsigned char _x, unsigned char _y,
                unsigned char _width, unsigned char _height, const char *_text, bool _border)
             : x(_x), y(_y), width(_width),
-              height(_height), border(_border) text(nullptr), image(nullptr)
+              height(_height), border(_border), text(nullptr), image(nullptr)
         {
                 text = new char[50];
        		strncpy(text, _text, 49); 
