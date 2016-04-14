@@ -10,13 +10,17 @@
 using namespace keycodes;
 
 int main() {
-    const char *name = "test-app";
+    const char *name = "2048";
     std::array<toe::Button, 5> buttons = {
-        toe::Button{0, 33, 33, 33, "Left", true, nullptr},
-        toe::Button{66, 33, 33, 33, "Right", true, nullptr},
-        toe::Button{33, 0, 33, 33, "Up", true, nullptr},
-        toe::Button{33, 66, 33, 33, "Down", true, nullptr},
-        toe::Button{80, 0, 20, 20, "New Game", false, nullptr}};
+        toe::Button{0, 33, 33, 33, "Left", false,
+                    "https://i.imgur.com/Mdr3lsf.png"},
+        toe::Button{66, 33, 33, 33, "Right", false,
+                    "https://i.imgur.com/eMMJAOL.png"},
+        toe::Button{33, 0, 33, 33, "Up", false,
+                    "https://i.imgur.com/EoJl2v2.png"},
+        toe::Button{33, 66, 33, 33, "Down", false,
+                    "https://i.imgur.com/26T3elm.png"},
+        toe::Button{80, 0, 20, 20, "New Game", true, nullptr}};
     const std::array<SimulateKeypress, 5> funcs = {
         SimulateKeypress{kVK_LeftArrow}, SimulateKeypress{kVK_RightArrow},
         SimulateKeypress{kVK_UpArrow}, SimulateKeypress{kVK_DownArrow},
