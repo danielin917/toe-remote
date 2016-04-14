@@ -22,6 +22,8 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
     var backButton: UIButton?
     var progress: UIActivityIndicatorView?
     
+    var needsUpdate: Bool = false
+    
     var isEdit: Bool
     
     init(selectionViewController: SelectionViewController?, ble: BLE?, peripheral: CBPeripheral) {
@@ -44,8 +46,8 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
     override func viewDidLoad() {
         self.view.backgroundColor = UIColor.whiteColor()
         addTitleView(self.view)
-        let titleHeight = self.view.bounds.height / 10.0
-        self.buttonView = UIView(frame: CGRectMake(0, titleHeight, self.view.bounds.width, titleHeight * 9.0))
+        let titleBarHeight = view.bounds.height * SelectionViewController.titleBarFraction
+        self.buttonView = UIView(frame: CGRectMake(0, titleBarHeight, self.view.bounds.width, self.view.bounds.height - titleBarHeight))
         view.addSubview(buttonView!)
         if progress == nil {
             progress = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
@@ -77,6 +79,11 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
     }
     
     func popView() {
+        if needsUpdate {
+            needsUpdate = false
+            buttonLayout?.makeThumbnail(buttonView!)
+            saveLayout()
+        }
         buttonLayout?.setDelegate(nil)
         self.dismissViewControllerAnimated(true, completion: {();
             guard let selectionViewController = self.selectionViewController else { return }
@@ -94,18 +101,24 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         }
     }
     
+    func buttonUpdated(button: Button) {
+        needsUpdate = true
+    }
+    
     func stopEditing(save: Bool) {
         guard isEdit else { return }
         print("[DEBUG] Editing Stopped")
         isEdit = false
         editButton?.setTitle("Edit", forState: .Normal)
+        makeAccessible(editButton?.titleLabel)
         backButton?.setTitle("Back", forState: .Normal)
+        makeAccessible(backButton?.titleLabel)
         if save {
             if let buttonView = buttonView {
                 buttonLayout?.makeThumbnail(buttonView)
             }
-            saveLayout()
             buttonLayout?.save()
+            saveLayout()
         } else {
             buttonLayout?.cancel()
         }
@@ -116,7 +129,9 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         print("[DEBUG] Editing Started")
         isEdit = true
         editButton?.setTitle("Done", forState: .Normal)
+        makeAccessible(editButton?.titleLabel)
         backButton?.setTitle("Cancel", forState: .Normal)
+        makeAccessible(backButton?.titleLabel)
         
         buttonLayout?.edit()
     }
@@ -130,10 +145,12 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
     }
     
     func addTitleView(view: UIView) {
-        let titleBar = UIView(frame: CGRectMake(0, 0, view.bounds.width, view.bounds.height / 10))
-        let backButtonWidth: CGFloat = 100.0
+        let titleBarHeight = view.bounds.height * SelectionViewController.titleBarFraction
+        let titleBar = UIView(frame: CGRectMake(0, 0, view.bounds.width, titleBarHeight))
+        let backButtonWidth: CGFloat = titleBar.bounds.width * 0.25
         
-        let title = UILabel(frame: CGRectMake(backButtonWidth, 0, titleBar.bounds.width - 2*backButtonWidth, titleBar.bounds.size.height))
+        let title = UILabel(frame: CGRectMake(backButtonWidth, 0, titleBar.bounds.width - 2*backButtonWidth, titleBar.bounds.height))
+        makeAccessible(title)
         title.text = ble?.getName(peripheral)
         if title.text == nil {
             title.text = peripheral.name
@@ -144,6 +161,7 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         backButton = UIButton(frame: CGRectMake(0, 0, backButtonWidth, titleBar.bounds.size.height))
         backButton!.setTitle("Back", forState: .Normal)
         backButton!.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        makeAccessible(backButton?.titleLabel)
         if selectionViewController != nil {
             backButton!.addTarget(self, action: #selector(DeviceViewController.back), forControlEvents: .TouchUpInside)
         }
@@ -152,6 +170,7 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         editButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
         editButton!.setTitle("Edit", forState: .Normal)
         editButton!.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        makeAccessible(editButton?.titleLabel)
         if selectionViewController != nil {
             editButton!.addTarget(self, action: #selector(editButtonPressed), forControlEvents: .TouchUpInside)
         }
@@ -198,7 +217,7 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
             numButtons = UnsafePointer<UInt8>(readBuffer.bytes).memory
             index = index + 1
         }
-        while numButtons > 0 && readBuffer.length - index >= Button.length {
+        while numButtons! > 0 && readBuffer.length - index >= Button.length {
             let range = NSRange(location: index, length: Button.length)
             let active = selectionViewController != nil
             buttonLayout!.addButton(self, data: readBuffer.subdataWithRange(range), active: active)

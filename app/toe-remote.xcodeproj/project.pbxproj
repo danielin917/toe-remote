@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013542921CBF535900A30D3F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013542911CBF535900A30D3F /* Helpers.swift */; };
 		014C634C1C9A49FB00EDA26B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C634B1C9A49FB00EDA26B /* AppDelegate.swift */; };
 		014C634E1C9A49FB00EDA26B /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C634D1C9A49FB00EDA26B /* SelectionViewController.swift */; };
 		014C63531C9A49FB00EDA26B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 014C63521C9A49FB00EDA26B /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		013542911CBF535900A30D3F /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		014C63481C9A49FB00EDA26B /* toe-remote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "toe-remote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		014C634B1C9A49FB00EDA26B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		014C634D1C9A49FB00EDA26B /* SelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				014C637D1C9A515400EDA26B /* BLE.swift */,
 				014C634B1C9A49FB00EDA26B /* AppDelegate.swift */,
 				014C634D1C9A49FB00EDA26B /* SelectionViewController.swift */,
+				013542911CBF535900A30D3F /* Helpers.swift */,
 				014C64341C9DCE0900EDA26B /* ButtonLayout.swift */,
 				014C63791C9A504B00EDA26B /* DeviceViewController.swift */,
 				014C63521C9A49FB00EDA26B /* Assets.xcassets */,
@@ -265,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				014C634E1C9A49FB00EDA26B /* SelectionViewController.swift in Sources */,
+				013542921CBF535900A30D3F /* Helpers.swift in Sources */,
 				014C634C1C9A49FB00EDA26B /* AppDelegate.swift in Sources */,
 				014C64351C9DCE0900EDA26B /* ButtonLayout.swift in Sources */,
 				014C637A1C9A504B00EDA26B /* DeviceViewController.swift in Sources */,

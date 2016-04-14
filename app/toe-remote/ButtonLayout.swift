@@ -9,6 +9,7 @@ import UIKit
 
 protocol ButtonDelegate {
     func didButtonPress(button: Button)
+    func buttonUpdated(button: Button)
 }
 
 class Button: NSObject {
@@ -26,10 +27,10 @@ class Button: NSObject {
     
     var image: UIImage? {
         didSet {
+            print("We found the image, adding now!")
             addImage()
         }
     }
-    var imageView: UIImageView?
     
     var startX: CGFloat?
     var startY: CGFloat?
@@ -64,14 +65,20 @@ class Button: NSObject {
         y = bytes[2]
         width = bytes[3]
         height = bytes[4]
-        border = bytes[5] == 1
+        border = (bytes[5] == UInt8(1))
         let imageLength: UInt8 = bytes[6]
         // 50 bytes
-        title = String(bytes: bytes.dropFirst(7).dropLast(256), encoding: NSUTF8StringEncoding)!
+        let t = String(bytes: dropNull(bytes.dropFirst(7).dropLast(256)), encoding: NSUTF8StringEncoding)
+        assert(t != nil)
+        title = t!
         super.init()
         if (imageLength > 0) {
-            imageURL = NSURL(string: String(bytes: bytes.dropFirst(57), encoding: NSUTF8StringEncoding)!)
+            let urlStr = String(bytes: dropNull(bytes.dropFirst(57)), encoding: NSUTF8StringEncoding)
+            assert(urlStr != nil)
+            print("Image is: \(urlStr)")
+            imageURL = NSURL(string: urlStr!)
             if imageURL != nil {
+                print("Setting up image to load")
                 self.loadImageFromURL(imageURL!)
             }
         }
@@ -80,26 +87,34 @@ class Button: NSObject {
     }
     
     func loadImageFromURL(imageURL: NSURL) {
-        let session = NSURLSession()
-        session.dataTaskWithURL(imageURL, completionHandler: { (data, response, error) -> () in
+        let request = NSURLRequest(URL: imageURL)
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+        let task = session.dataTaskWithRequest(request,  completionHandler: { (data, response, error) -> Void in
+            print("Got response")
             var image: UIImage? = nil
             if error == nil && data != nil {
                 image = UIImage(data: data!)
+                print("No errors")
+            } else {
+                print(error)
             }
             dispatch_async(dispatch_get_main_queue(), {
+                print("Set the image: \(image == nil)")
                 self.image = image
             })
         })
+        task.resume();
     }
     
     func addImage() {
         guard let image = image else { return }
         guard let button = button else { return }
-        if imageView == nil {
-            imageView = UIImageView(frame: button.frame)
-            button.addSubview(imageView!)
-        }
-        imageView!.image = image
+        print("Added")
+        button.removeTarget(self, action: #selector(Button.buttonPressed), forControlEvents: .TouchUpInside)
+        button.setTitle("", forState: .Normal)
+        button.setImage(image, forState: .Normal)
+        button.addTarget(self, action: #selector(Button.buttonPressed), forControlEvents: .TouchUpInside)
+        delegate?.buttonUpdated(self)
     }
     
     func buttonPressed() {
@@ -139,7 +154,8 @@ class Button: NSObject {
                 button!.backgroundColor = UIColor.whiteColor()
                 button!.setTitle(title, forState: .Normal)
                 button!.setTitleColor(UIColor.blueColor(), forState: .Normal)
-                button!.addTarget(self, action: #selector(buttonPressed), forControlEvents: .TouchUpInside)
+                makeAccessible(button?.titleLabel)
+                button!.addTarget(self, action: #selector(Button.buttonPressed), forControlEvents: .TouchUpInside)
             } else {
                 addImage()
             }

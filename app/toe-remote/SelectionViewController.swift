@@ -21,8 +21,7 @@ class SelectionViewCell: UICollectionViewCell {
         self.layer.borderWidth = 1
         
         textLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height/3))
-        textLabel.adjustsFontSizeToFitWidth = true
-        textLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+        makeAccessible(textLabel)
         textLabel.textAlignment = .Center
         contentView.addSubview(textLabel)
         
@@ -37,6 +36,8 @@ class SelectionViewCell: UICollectionViewCell {
 }
 
 class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, BLEDelegate {
+    
+    static let titleBarFraction: CGFloat = 0.15
 
     var collectionView: UICollectionView!
     var ble: BLE!
@@ -59,7 +60,8 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         let height = view.bounds.height / 2
         layout.itemSize = CGSize(width: width, height: height)
         
-        collectionView = UICollectionView(frame: CGRectMake(0, view.bounds.height/10, view.bounds.width, view.bounds.height*9/10), collectionViewLayout: layout)
+        let titleBarHeight = view.bounds.height * SelectionViewController.titleBarFraction
+        collectionView = UICollectionView(frame: CGRectMake(0, titleBarHeight, view.bounds.width, view.bounds.height - titleBarHeight), collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.registerClass(SelectionViewCell.self, forCellWithReuseIdentifier: "Cell")
@@ -81,15 +83,18 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     }
     
     func addTitleView(view: UIView) {
-        let titleBar = UIView(frame: CGRectMake(0, 0, view.bounds.width, view.bounds.height / 10))
-        let backButtonWidth: CGFloat = 100.0
+        let titleBarHeight = view.bounds.height * SelectionViewController.titleBarFraction
+        let titleBar = UIView(frame: CGRectMake(0, 0, view.bounds.width, titleBarHeight))
+        let backButtonWidth: CGFloat = titleBar.bounds.width / 4
         
         let title = UILabel(frame: CGRectMake(backButtonWidth, 0, titleBar.bounds.width - 2*backButtonWidth, titleBar.bounds.size.height))
         title.text = "Toe Remote"
+        makeAccessible(title)
         title.textAlignment = .Center
         titleBar.addSubview(title)
         
         let refreshButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
+        makeAccessible(refreshButton.titleLabel)
         refreshButton.setTitle("Refresh", forState: .Normal)
         refreshButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         refreshButton.addTarget(self, action: #selector(refresh), forControlEvents: .TouchUpInside)
