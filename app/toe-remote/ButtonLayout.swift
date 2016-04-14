@@ -1,5 +1,5 @@
 //
-//  ButtonLayout.swift
+//  ButtonLayout.swiftr
 //  toe-remote
 //
 
@@ -12,6 +12,8 @@ protocol ButtonDelegate {
 }
 
 class Button: NSObject {
+    static let length = 313
+    
     var delegate: ButtonDelegate?
     var id: UInt8
     var x: UInt8
@@ -19,40 +21,85 @@ class Button: NSObject {
     var width: UInt8
     var height: UInt8
     var title: String
+    var border: Bool
+    var imageURL: NSURL?
+    
+    var image: UIImage? {
+        didSet {
+            addImage()
+        }
+    }
+    var imageView: UIImageView?
     
     var startX: CGFloat?
     var startY: CGFloat?
     var startWidth: CGFloat?
     var startHeight: CGFloat?
     
+    var frame: CGRect?
+    
     var button: UIButton?
     var moveGR: UIPanGestureRecognizer!
     var resizeGR: UIPinchGestureRecognizer!
+    var editing: Bool = false
     
-    init(id: UInt8, x: UInt8, y: UInt8, width: UInt8, height: UInt8, title: String) {
+    /*init(id: UInt8, x: UInt8, y: UInt8, width: UInt8, height: UInt8, title: String, border: Bool) {
         self.id = id
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.title = title
+        self.border = border
         super.init()
-        self.moveGR = UIPanGestureRecognizer(target: self, action: Selector("handleMovePan"))
-        self.resizeGR = UIPinchGestureRecognizer(target: self, action: Selector("handleResizePinch"))
-    }
+        self.moveGR = UIPanGestureRecognizer(target: self, action: #selector(handleMovePan))
+        self.resizeGR = UIPinchGestureRecognizer(target: self, action: #selector(handleResizePinch))
+    }*/
     
     init(data: NSData, active: Bool) {
-        assert(data.length >= 55)
+        assert(data.length >= Button.length)
         let bytes = UnsafeBufferPointer<UInt8>(start: UnsafePointer<UInt8>(data.bytes), count: data.length)
         id = bytes[0]
         x = bytes[1]
         y = bytes[2]
         width = bytes[3]
         height = bytes[4]
-        title = String(bytes: bytes.dropFirst(5), encoding: NSUTF8StringEncoding)!
+        border = bytes[5] == 1
+        let imageLength: UInt8 = bytes[6]
+        // 50 bytes
+        title = String(bytes: bytes.dropFirst(7).dropLast(256), encoding: NSUTF8StringEncoding)!
         super.init()
-        self.moveGR = UIPanGestureRecognizer(target: self, action: Selector("handleMovePan"))
-        self.resizeGR = UIPinchGestureRecognizer(target: self, action: Selector("handleResizePinch"))
+        if (imageLength > 0) {
+            imageURL = NSURL(string: String(bytes: bytes.dropFirst(57), encoding: NSUTF8StringEncoding)!)
+            if imageURL != nil {
+                self.loadImageFromURL(imageURL!)
+            }
+        }
+        self.moveGR = UIPanGestureRecognizer(target: self, action: #selector(handleMovePan))
+        self.resizeGR = UIPinchGestureRecognizer(target: self, action: #selector(handleResizePinch))
+    }
+    
+    func loadImageFromURL(imageURL: NSURL) {
+        let session = NSURLSession()
+        session.dataTaskWithURL(imageURL, completionHandler: { (data, response, error) -> () in
+            var image: UIImage? = nil
+            if error == nil && data != nil {
+                image = UIImage(data: data!)
+            }
+            dispatch_async(dispatch_get_main_queue(), {
+                self.image = image
+            })
+        })
+    }
+    
+    func addImage() {
+        guard let image = image else { return }
+        guard let button = button else { return }
+        if imageView == nil {
+            imageView = UIImageView(frame: button.frame)
+            button.addSubview(imageView!)
+        }
+        imageView!.image = image
     }
     
     func buttonPressed() {
@@ -69,6 +116,9 @@ class Button: NSObject {
     }
     
     func addToView(view: UIView) {
+        if imageURL != nil && image == nil {
+            loadImageFromURL(imageURL!)
+        }
         if button == nil {
             // Scale to view bounds
             let viewHeight = view.bounds.height
@@ -78,14 +128,21 @@ class Button: NSObject {
             let rWidth = normalize(viewWidth, percent: width)
             let rHeight = normalize(viewHeight, percent: height)
             
-            button = UIButton(frame: CGRectMake(rX, rY, rWidth, rHeight))
-            button!.layer.cornerRadius = 10
-            button!.layer.borderColor = UIColor.blackColor().CGColor
-            button!.layer.borderWidth = 1
-            button!.backgroundColor = UIColor.whiteColor()
-            button!.setTitle(title, forState: .Normal)
-            button!.setTitleColor(UIColor.blueColor(), forState: .Normal)
-            button!.addTarget(self, action: Selector("buttonPressed"), forControlEvents: .TouchUpInside)
+            button = UIButton(type: .System)
+            button!.frame = CGRectMake(rX, rY, rWidth, rHeight)
+            if border {
+                button!.layer.cornerRadius = 10
+                button!.layer.borderColor = UIColor.blackColor().CGColor
+                button!.layer.borderWidth = 1
+            }
+            if image == nil {
+                button!.backgroundColor = UIColor.whiteColor()
+                button!.setTitle(title, forState: .Normal)
+                button!.setTitleColor(UIColor.blueColor(), forState: .Normal)
+                button!.addTarget(self, action: #selector(buttonPressed), forControlEvents: .TouchUpInside)
+            } else {
+                addImage()
+            }
         }
         print("[DEBUG] Added button with id: \(id) to view")
         view.addSubview(button!)
@@ -109,10 +166,12 @@ class Button: NSObject {
     }
     
     func handleMovePan() {
+        assert(editing)
         guard let button = button else { return }
         guard let superview = button.superview else { return }
         switch moveGR.state {
         case .Began:
+            moveGR.cancelsTouchesInView = true
             startX = normalize(superview.bounds.width, percent: x)
             startY = normalize(superview.bounds.height, percent: y)
             startWidth = normalize(superview.bounds.width, percent: width)
@@ -124,6 +183,8 @@ class Button: NSObject {
             point.x += startX!
             point.y += startY!
             let newPoint = moveInView(superview, point: point)
+            x = denormalize(superview.bounds.width, position: newPoint.x)
+            y = denormalize(superview.bounds.height, position: newPoint.y)
             button.frame = CGRectMake(newPoint.x, newPoint.y, startWidth!, startHeight!)
             break
         case .Ended:
@@ -148,6 +209,12 @@ class Button: NSObject {
         var dx = (button!.frame.width - scale*button!.frame.width) / 2
         var dy = (button!.frame.height - scale*button!.frame.height) / 2
         
+        if (button!.bounds.width - 2*dx) / superview.bounds.width < 0.2 {
+            dx = (button!.bounds.width - 0.2 * superview.bounds.width) / 2
+        }
+        if (button!.bounds.height - 2*dy) / superview.bounds.height < 0.2 {
+            dy = (button!.bounds.height - 0.2 * superview.bounds.height) / 2
+        }
         if startX! + dx < 0 {
             dx = -startX!
         }
@@ -166,10 +233,12 @@ class Button: NSObject {
     }
     
     func handleResizePinch() {
+        assert(editing)
         guard let button = button else { return }
         guard let superview = button.superview else { return }
         switch resizeGR.state {
         case .Began:
+            resizeGR.cancelsTouchesInView = true
             startX = normalize(superview.bounds.width, percent: x)
             startY = normalize(superview.bounds.height, percent: y)
             startWidth = normalize(superview.bounds.width, percent: width)
@@ -181,6 +250,10 @@ class Button: NSObject {
             resizeGR.scale = scale
             let dx = (button.frame.width - scale*button.frame.width) / 2
             let dy = (button.frame.height - scale*button.frame.height) / 2
+            x = denormalize(superview.bounds.width, position: startX! + dx)
+            y = denormalize(superview.bounds.height, position: startY! + dy)
+            width = denormalize(superview.bounds.width, position: startWidth! - 2*dx)
+            height = denormalize(superview.bounds.height, position: startHeight! - 2*dy)
             button.frame = CGRectMake(startX! + dx, startY! + dy, startWidth! - 2*dx, startHeight! - 2*dy)
             break
         case .Ended:
@@ -204,8 +277,28 @@ class Button: NSObject {
         }
     }
     
+    func cancel() {
+        guard editing else { return }
+        guard let superview = button?.superview else { return }
+        guard let frame = frame else { return }
+        x = denormalize(superview.bounds.width, position: frame.minX)
+        y = denormalize(superview.bounds.height, position: frame.minY)
+        width = denormalize(superview.bounds.width, position: frame.width)
+        height = denormalize(superview.bounds.height, position: frame.height)
+        button?.frame = CGRectMake(frame.minX, frame.minY, frame.width, frame.height)
+        edit(false)
+    }
+    
+    func save() {
+        guard editing else { return }
+        frame = button?.frame
+        edit(false)
+    }
+    
     func edit(isEditing: Bool) {
+        editing = isEditing
         if isEditing {
+            frame = button?.frame
             button?.addGestureRecognizer(moveGR)
             button?.addGestureRecognizer(resizeGR)
         } else {
@@ -232,7 +325,7 @@ class ButtonLayout: NSObject {
         
     }
     
-    func setDelegate(delegate: ButtonDelegate) {
+    func setDelegate(delegate: ButtonDelegate?) {
         for button in buttons {
             button.delegate = delegate
         }
@@ -261,9 +354,21 @@ class ButtonLayout: NSObject {
         }
     }
     
-    func edit(isEditing: Bool) {
+    func edit() {
         for button in buttons {
-            button.edit(isEditing)
+            button.edit(true)
+        }
+    }
+    
+    func cancel() {
+        for button in buttons {
+            button.cancel()
+        }
+    }
+    
+    func save() {
+        for button in buttons {
+            button.save()
         }
     }
 }

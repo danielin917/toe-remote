@@ -43,6 +43,9 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     var cachedLayouts: Dictionary<String, ButtonLayout>!
     var deviceViewController: DeviceViewController?
     
+    var peripherals: [CBPeripheral] = []
+    var progress: UIActivityIndicatorView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view
@@ -89,22 +92,20 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         let refreshButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
         refreshButton.setTitle("Refresh", forState: .Normal)
         refreshButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        refreshButton.addTarget(self, action: Selector("refresh"), forControlEvents: .TouchUpInside)
+        refreshButton.addTarget(self, action: #selector(refresh), forControlEvents: .TouchUpInside)
         titleBar.addSubview(refreshButton)
         
         view.addSubview(titleBar)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ble.peripherals.count
+        return peripherals.count
     }
-    
-    func nothing() { }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! SelectionViewCell
-        assert(ble.peripherals.count > indexPath.item)
-        let peripheral = ble.peripherals[indexPath.item]
+        assert(peripherals.count > indexPath.item)
+        let peripheral = peripherals[indexPath.item]
         cell.textLabel.text = ble.getName(peripheral)
         cell.buttonView.image = cachedLayouts[peripheral.identifier.UUIDString]?.thumbnail
         return cell
@@ -112,9 +113,9 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         print("[DEBUG] Selected item: ", indexPath.item)
-        assert(ble.peripherals.count > indexPath.item)
+        assert(peripherals.count > indexPath.item)
         
-        let peripheral = ble.peripherals[indexPath.item]
+        let peripheral = peripherals[indexPath.item]
         if deviceViewController?.peripheral != peripheral {
             deviceViewController = DeviceViewController(selectionViewController: self, ble: ble, peripheral: peripheral)
         }
@@ -126,6 +127,8 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     
     func bleDidScanTimeout() {
         print("[DEBUG] Scan Timeout")
+        progress!.stopAnimating()
+        peripherals = ble.peripherals
         self.collectionView.reloadData()
     }
     
@@ -150,6 +153,14 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
     }
     
     func retrieveNearbyDevices() {
+        print("[DEBUG] Retrieving Nearby Devices")
+        if progress == nil {
+            progress = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+            let width: CGFloat = 100
+            progress!.frame = CGRectMake((self.view.bounds.width - width)/2, (self.view.bounds.height - width)/2, width, width)
+            self.view.addSubview(progress!)
+        }
+        progress!.startAnimating()
         ble.startScanning(1)
     }
     

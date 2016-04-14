@@ -19,6 +19,8 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
     var viewLoaded: Bool
     var paused: Bool
     var editButton: UIButton?
+    var backButton: UIButton?
+    var progress: UIActivityIndicatorView?
     
     var isEdit: Bool
     
@@ -45,8 +47,17 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         let titleHeight = self.view.bounds.height / 10.0
         self.buttonView = UIView(frame: CGRectMake(0, titleHeight, self.view.bounds.width, titleHeight * 9.0))
         view.addSubview(buttonView!)
+        if progress == nil {
+            progress = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+            let width: CGFloat = 100
+            progress!.frame = CGRectMake((self.buttonView!.bounds.width - width)/2, (self.buttonView!.bounds.height - width)/2, width, width)
+            self.buttonView!.addSubview(progress!)
+        }
         if buttonLayout != nil {
             buttonLayout!.addToView(buttonView!)
+            buttonLayout!.setDelegate(self)
+        } else {
+            progress!.startAnimating()
         }
         viewLoaded = true
     }
@@ -57,8 +68,16 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         selectionViewController?.cachedLayouts.updateValue(buttonLayout, forKey: key)
     }
     
+    func back() {
+        if isEdit {
+            stopEditing(false)
+        } else {
+            popView()
+        }
+    }
+    
     func popView() {
-        stopEditing()
+        buttonLayout?.setDelegate(nil)
         self.dismissViewControllerAnimated(true, completion: {();
             guard let selectionViewController = self.selectionViewController else { return }
             self.ble?.delegate = selectionViewController
@@ -75,29 +94,38 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         }
     }
     
-    func stopEditing() {
+    func stopEditing(save: Bool) {
         guard isEdit else { return }
+        print("[DEBUG] Editing Stopped")
         isEdit = false
         editButton?.setTitle("Edit", forState: .Normal)
-        if let buttonView = buttonView {
-            buttonLayout?.makeThumbnail(buttonView)
+        backButton?.setTitle("Back", forState: .Normal)
+        if save {
+            if let buttonView = buttonView {
+                buttonLayout?.makeThumbnail(buttonView)
+            }
+            saveLayout()
+            buttonLayout?.save()
+        } else {
+            buttonLayout?.cancel()
         }
-        saveLayout()
-        buttonLayout?.edit(false)
     }
     
     func startEditing() {
         guard !isEdit else { return }
+        print("[DEBUG] Editing Started")
         isEdit = true
         editButton?.setTitle("Done", forState: .Normal)
-        buttonLayout?.edit(true)
+        backButton?.setTitle("Cancel", forState: .Normal)
+        
+        buttonLayout?.edit()
     }
     
     func editButtonPressed() {
         if !isEdit {
             startEditing()
         } else {
-            stopEditing()
+            stopEditing(true)
         }
     }
     
@@ -113,19 +141,19 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         title.textAlignment = .Center
         titleBar.addSubview(title)
         
-        let backButton = UIButton(frame: CGRectMake(0, 0, backButtonWidth, titleBar.bounds.size.height))
-        backButton.setTitle("Back", forState: .Normal)
-        backButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        backButton = UIButton(frame: CGRectMake(0, 0, backButtonWidth, titleBar.bounds.size.height))
+        backButton!.setTitle("Back", forState: .Normal)
+        backButton!.setTitleColor(UIColor.blueColor(), forState: .Normal)
         if selectionViewController != nil {
-            backButton.addTarget(self, action: Selector("popView"), forControlEvents: .TouchUpInside)
+            backButton!.addTarget(self, action: #selector(DeviceViewController.back), forControlEvents: .TouchUpInside)
         }
-        titleBar.addSubview(backButton)
+        titleBar.addSubview(backButton!)
         
         editButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
         editButton!.setTitle("Edit", forState: .Normal)
         editButton!.setTitleColor(UIColor.blueColor(), forState: .Normal)
         if selectionViewController != nil {
-            editButton!.addTarget(self, action: Selector("editButtonPressed"), forControlEvents: .TouchUpInside)
+            editButton!.addTarget(self, action: #selector(editButtonPressed), forControlEvents: .TouchUpInside)
         }
         titleBar.addSubview(editButton!)
         
@@ -147,7 +175,6 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
         if buttonLayout == nil {
             ble?.enableNotifications(true)
             print("[DEBUG] Sending Button Layout Request")
-            buttonLayout = ButtonLayout()
             let bytes: [UInt8] = [0x00, 0x00]
             ble?.write(data: NSData(bytes: bytes, length: 2))
         }
@@ -161,27 +188,30 @@ class DeviceViewController: UIViewController, BLEDelegate, ButtonDelegate {
     }
     
     func bleDidReceiveData(data: NSData?) {
-        guard let buttonLayout = buttonLayout else { return }
+        if (buttonLayout == nil) {
+            buttonLayout = ButtonLayout()
+        }
         guard let data = data else { return }
         readBuffer.appendData(data)
         guard readBuffer.length - index > 0 else { return }
         if numButtons == nil {
             numButtons = UnsafePointer<UInt8>(readBuffer.bytes).memory
-            ++index
+            index = index + 1
         }
-        while numButtons > 0 && readBuffer.length - index >= 55 {
-            let range = NSRange(location: index, length: 55)
+        while numButtons > 0 && readBuffer.length - index >= Button.length {
+            let range = NSRange(location: index, length: Button.length)
             let active = selectionViewController != nil
-            buttonLayout.addButton(self, data: readBuffer.subdataWithRange(range), active: active)
-            index += 55
-            --numButtons!
+            buttonLayout!.addButton(self, data: readBuffer.subdataWithRange(range), active: active)
+            index += Button.length
+            numButtons = numButtons! - 1
         }
         if numButtons == 0 {
             print("[DEBUG] Recieved the layout")
             // ble.enableNotifications(false)
             saveLayout()
             if self.viewLoaded {
-                buttonLayout.addToView(buttonView!)
+                progress!.stopAnimating()
+                buttonLayout!.addToView(buttonView!)
             }
         }
     }

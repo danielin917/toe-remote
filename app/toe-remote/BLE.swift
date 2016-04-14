@@ -45,7 +45,7 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func getName(peripheral: CBPeripheral) -> String? {
-        for var i = 0; i < peripherals.count; ++i {
+        for i in 0..<peripherals.count {
             if peripheral.identifier.UUIDString == peripherals[i].identifier.UUIDString {
                 if peripheralNames[i] != nil {
                     return peripheralNames[i]
@@ -73,9 +73,8 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         
         print("[DEBUG] Scanning started")
         
-        // CBCentralManagerScanOptionAllowDuplicatesKey
-        
-        NSTimer.scheduledTimerWithTimeInterval(timeout, target: self, selector: Selector("scanTimeout"), userInfo: nil, repeats: false)
+        peripherals = []
+        NSTimer.scheduledTimerWithTimeInterval(timeout, target: self, selector: #selector(scanTimeout), userInfo: nil, repeats: false)
         
         let services:[CBUUID] = [CBUUID(string: RBL_SERVICE_UUID)]
         self.centralManager.scanForPeripheralsWithServices(services, options: nil)
@@ -202,7 +201,7 @@ class BLE: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 name = obj as? String
             }
         }
-        for var i = 0; i < self.peripherals.count; i++ {
+        for i in 0..<peripherals.count {
             
             let p = self.peripherals[i] as CBPeripheral
             
