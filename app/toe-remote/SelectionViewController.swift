@@ -96,6 +96,7 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         let refreshButton = UIButton(frame: CGRectMake(titleBar.bounds.width - backButtonWidth, 0, backButtonWidth, titleBar.bounds.size.height))
         makeAccessible(refreshButton.titleLabel)
         refreshButton.setTitle("Refresh", forState: .Normal)
+        refreshButton.titleLabel?.textAlignment = .Right
         refreshButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         refreshButton.addTarget(self, action: #selector(refresh), forControlEvents: .TouchUpInside)
         titleBar.addSubview(refreshButton)
@@ -111,8 +112,12 @@ class SelectionViewController: UIViewController, UICollectionViewDelegateFlowLay
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! SelectionViewCell
         assert(peripherals.count > indexPath.item)
         let peripheral = peripherals[indexPath.item]
-        cell.textLabel.text = ble.getName(peripheral)
-        cell.buttonView.image = cachedLayouts[peripheral.identifier.UUIDString]?.thumbnail
+        let name = ble.getName(peripheral)
+        cell.textLabel.text = name
+        var key = peripheral.identifier.UUIDString
+        key.appendContentsOf(name ?? "")
+        print("Key is: \(key)")
+        cell.buttonView.image = cachedLayouts[key]?.thumbnail
         return cell
     }
     

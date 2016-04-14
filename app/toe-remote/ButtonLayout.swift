@@ -353,6 +353,11 @@ class ButtonLayout: NSObject {
         }
     }
     
+    func clear() {
+        thumbnail = nil
+        buttons.removeAll()
+    }
+    
     func makeThumbnail(view: UIView) {
         UIGraphicsBeginImageContext(view.frame.size)
         view.layer.renderInContext(UIGraphicsGetCurrentContext()!)

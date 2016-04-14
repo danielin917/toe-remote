@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013542941CBF8A8400A30D3F /* ServerInterfaceObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 013542931CBF8A8400A30D3F /* ServerInterfaceObjC.mm */; };
+		013542991CBF8B0A00A30D3F /* ServerInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 013542981CBF8B0A00A30D3F /* ServerInterface.cpp */; };
+		0135429F1CBF8B4D00A30D3F /* BLEPeripheralObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0135429B1CBF8B4D00A30D3F /* BLEPeripheralObjC.mm */; };
+		013542A01CBF8B4D00A30D3F /* SimulateKeypress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0135429C1CBF8B4D00A30D3F /* SimulateKeypress.cpp */; };
+		013542A31CBF8EA900A30D3F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 013542A21CBF8EA900A30D3F /* CoreBluetooth.framework */; };
 		01FA95F61CB1F4ED00104F77 /* ControllerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FA95F51CB1F4ED00104F77 /* ControllerData.swift */; };
-		01FA96011CB200BA00104F77 /* KeyboardAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 01FA96001CB200BA00104F77 /* KeyboardAction.m */; };
+		01FA96061CB3900700104F77 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FA96051CB3900700104F77 /* DetailViewController.swift */; };
 		01FD82671CADF6D600C4E4C2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FD82661CADF6D600C4E4C2 /* AppDelegate.swift */; };
 		01FD82691CADF6D600C4E4C2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FD82681CADF6D600C4E4C2 /* ViewController.swift */; };
 		01FD826B1CADF6D600C4E4C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01FD826A1CADF6D600C4E4C2 /* Assets.xcassets */; };
@@ -35,11 +40,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		013542931CBF8A8400A30D3F /* ServerInterfaceObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ServerInterfaceObjC.mm; sourceTree = "<group>"; };
+		013542951CBF8A9F00A30D3F /* ServerInterfaceObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerInterfaceObjC.h; sourceTree = "<group>"; };
+		013542961CBF8B0A00A30D3F /* ServerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerInterface.h; path = ../../networking/Main_sketch/ServerInterface.h; sourceTree = "<group>"; };
+		013542971CBF8B0A00A30D3F /* lib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib.h; path = ../../networking/Main_sketch/lib.h; sourceTree = "<group>"; };
+		013542981CBF8B0A00A30D3F /* ServerInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ServerInterface.cpp; path = ../../networking/Main_sketch/ServerInterface.cpp; sourceTree = "<group>"; };
+		0135429B1CBF8B4D00A30D3F /* BLEPeripheralObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = BLEPeripheralObjC.mm; path = "../../networking/apple-peripheral/BLEPeripheralObjC.mm"; sourceTree = "<group>"; };
+		0135429C1CBF8B4D00A30D3F /* SimulateKeypress.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimulateKeypress.cpp; path = "../../networking/apple-peripheral/SimulateKeypress.cpp"; sourceTree = "<group>"; };
+		0135429D1CBF8B4D00A30D3F /* SimulateKeypress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimulateKeypress.h; path = "../../networking/apple-peripheral/SimulateKeypress.h"; sourceTree = "<group>"; };
+		013542A11CBF8BC900A30D3F /* BLEPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLEPeripheral.h; path = ../../networking/Main_sketch/BLEPeripheral.h; sourceTree = "<group>"; };
+		013542A21CBF8EA900A30D3F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		01FA95F51CB1F4ED00104F77 /* ControllerData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerData.swift; sourceTree = "<group>"; };
 		01FA95FE1CB2006E00104F77 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
-		01FA95FF1CB200BA00104F77 /* KeyboardAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardAction.h; sourceTree = "<group>"; };
-		01FA96001CB200BA00104F77 /* KeyboardAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardAction.m; sourceTree = "<group>"; };
 		01FA96021CB3709300104F77 /* controller-maker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "controller-maker-Bridging-Header.h"; sourceTree = "<group>"; };
+		01FA96051CB3900700104F77 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		01FD82631CADF6D600C4E4C2 /* controller-maker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "controller-maker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01FD82661CADF6D600C4E4C2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01FD82681CADF6D600C4E4C2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				013542A31CBF8EA900A30D3F /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,9 +94,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0135429A1CBF8B1300A30D3F /* Bluetooth Server */ = {
+			isa = PBXGroup;
+			children = (
+				013542961CBF8B0A00A30D3F /* ServerInterface.h */,
+				013542981CBF8B0A00A30D3F /* ServerInterface.cpp */,
+				013542951CBF8A9F00A30D3F /* ServerInterfaceObjC.h */,
+				013542931CBF8A8400A30D3F /* ServerInterfaceObjC.mm */,
+				0135429B1CBF8B4D00A30D3F /* BLEPeripheralObjC.mm */,
+				0135429D1CBF8B4D00A30D3F /* SimulateKeypress.h */,
+				0135429C1CBF8B4D00A30D3F /* SimulateKeypress.cpp */,
+				013542A11CBF8BC900A30D3F /* BLEPeripheral.h */,
+				013542971CBF8B0A00A30D3F /* lib.h */,
+			);
+			name = "Bluetooth Server";
+			sourceTree = "<group>";
+		};
 		01FD825A1CADF6D600C4E4C2 = {
 			isa = PBXGroup;
 			children = (
+				013542A21CBF8EA900A30D3F /* CoreBluetooth.framework */,
 				01FD82651CADF6D600C4E4C2 /* controller-maker */,
 				01FD82771CADF6D600C4E4C2 /* controller-makerTests */,
 				01FD82821CADF6D600C4E4C2 /* controller-makerUITests */,
@@ -103,11 +135,11 @@
 			isa = PBXGroup;
 			children = (
 				01FA96021CB3709300104F77 /* controller-maker-Bridging-Header.h */,
-				01FA95FF1CB200BA00104F77 /* KeyboardAction.h */,
-				01FA96001CB200BA00104F77 /* KeyboardAction.m */,
+				0135429A1CBF8B1300A30D3F /* Bluetooth Server */,
 				01FA95FE1CB2006E00104F77 /* Action.h */,
 				01FD82661CADF6D600C4E4C2 /* AppDelegate.swift */,
 				01FD82681CADF6D600C4E4C2 /* ViewController.swift */,
+				01FA96051CB3900700104F77 /* DetailViewController.swift */,
 				01FA95F51CB1F4ED00104F77 /* ControllerData.swift */,
 				01FD826A1CADF6D600C4E4C2 /* Assets.xcassets */,
 				01FD826C1CADF6D600C4E4C2 /* Main.storyboard */,
@@ -264,9 +296,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				013542941CBF8A8400A30D3F /* ServerInterfaceObjC.mm in Sources */,
+				0135429F1CBF8B4D00A30D3F /* BLEPeripheralObjC.mm in Sources */,
+				013542991CBF8B0A00A30D3F /* ServerInterface.cpp in Sources */,
 				01FD82691CADF6D600C4E4C2 /* ViewController.swift in Sources */,
 				01FD82671CADF6D600C4E4C2 /* AppDelegate.swift in Sources */,
-				01FA96011CB200BA00104F77 /* KeyboardAction.m in Sources */,
+				013542A01CBF8B4D00A30D3F /* SimulateKeypress.cpp in Sources */,
+				01FA96061CB3900700104F77 /* DetailViewController.swift in Sources */,
 				01FA95F61CB1F4ED00104F77 /* ControllerData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

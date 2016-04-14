@@ -250,6 +250,7 @@ bool BLEPeripheral::connected() {
 }
 
 - (void)cleanup {
+    [self advertise:false];
     [self.peripheralManager removeAllServices];
 }
 

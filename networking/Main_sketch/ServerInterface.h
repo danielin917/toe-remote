@@ -146,6 +146,7 @@ class ServerInterface
 template <typename Callable>
 ServerInterface<Callable>::ServerInterface() : ble(nullptr)
 {
+    Button::next_id = 0;
 }
 
 template <typename Callable>
@@ -165,7 +166,7 @@ int ServerInterface<Callable>::add_button(Button btn, Callable func)
     }
     Button *button = new Button{static_cast<Button &&>(btn)};
     btn_vec.push_back(button);
-    function_map.push_back(func);
+    function_map.push_back(static_cast<Callable &&>(func));
     button->id = Button::next_id++;
     return button->id;
 }

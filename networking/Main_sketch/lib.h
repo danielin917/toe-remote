@@ -16,7 +16,7 @@ class Vector
         T *creation = new T[length * 2];
         for (unsigned i = 0; i < length; ++i)
         {
-            creation[i] = array[i];
+            creation[i] = static_cast<T &&>(array[i]);
         }
         delete[] array;
         array = creation;
@@ -31,7 +31,7 @@ class Vector
         if (count == length)
             grow();
 
-        array[count] = data;
+        array[count] = static_cast<T &&>(data);
         count += 1;
     }
     void pop_back()
@@ -44,7 +44,7 @@ class Vector
         }
     }
     size_t size() { return count; }
-    T operator[](int x)
+    T &operator[](int x)
     {
         /*some sort of bounds check
         if(x >= count)
