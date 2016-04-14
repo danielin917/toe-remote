@@ -17,23 +17,24 @@ class SimulateKeypress {
     uint16_t keycode;
     struct __CGEvent *_down;
     struct __CGEvent *_up;
-    
+
     void destroy();
-public:
+
+  public:
     SimulateKeypress();
-    
+
     explicit SimulateKeypress(uint16_t keycode);
-    
-    SimulateKeypress(const SimulateKeypress& other);
-    
-    //SimulateKeypress(SimulateKeypress&& other);
-    
+
+    SimulateKeypress(const SimulateKeypress &other);
+
+    SimulateKeypress(SimulateKeypress &&other);
+
     ~SimulateKeypress();
-    
-    SimulateKeypress& operator=(const SimulateKeypress& other);
-    
-    //SimulateKeypress& operator=(SimulateKeypress&& other);
-    
+
+    SimulateKeypress &operator=(const SimulateKeypress &other);
+
+    SimulateKeypress &operator=(SimulateKeypress &&other);
+
     void operator()() const;
 };
 

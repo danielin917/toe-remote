@@ -3,17 +3,19 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <Carbon/Carbon.h>
 
-SimulateKeypress::SimulateKeypress() : keycode(0), _down(nullptr), _up(nullptr) {}
+SimulateKeypress::SimulateKeypress()
+    : keycode(0), _down(nullptr), _up(nullptr) {}
 
-SimulateKeypress::SimulateKeypress(uint16_t keycode) :
-keycode(keycode),
-_down(CGEventCreateKeyboardEvent(nullptr, (CGKeyCode)keycode, true)),
-_up(CGEventCreateKeyboardEvent(nullptr, (CGKeyCode)keycode, false)) {
+SimulateKeypress::SimulateKeypress(uint16_t keycode)
+    : keycode(keycode),
+      _down(CGEventCreateKeyboardEvent(nullptr, (CGKeyCode)keycode, true)),
+      _up(CGEventCreateKeyboardEvent(nullptr, (CGKeyCode)keycode, false)) {
     assert(_down != nullptr && _up != nullptr);
     assert(_down != _up);
 }
 
-SimulateKeypress::SimulateKeypress(const SimulateKeypress& other) : keycode(other.keycode) {
+SimulateKeypress::SimulateKeypress(const SimulateKeypress &other)
+    : keycode(other.keycode) {
     if (this == &other) {
         return;
     }
@@ -26,12 +28,13 @@ SimulateKeypress::SimulateKeypress(const SimulateKeypress& other) : keycode(othe
         assert(_up != nullptr);
     }
 }
-/*
-SimulateKeypress::SimulateKeypress(SimulateKeypress&& other) : keycode(other.keycode), _down(other._down), _up(other._up) {
+
+SimulateKeypress::SimulateKeypress(SimulateKeypress &&other)
+    : keycode(other.keycode), _down(other._down), _up(other._up) {
     other._down = nullptr;
     other._up = nullptr;
 }
-*/
+
 void SimulateKeypress::destroy() {
     assert((_down == nullptr && _up == nullptr) || _down != _up);
     if (_down != nullptr) {
@@ -44,11 +47,9 @@ void SimulateKeypress::destroy() {
     }
 }
 
-SimulateKeypress::~SimulateKeypress() {
-    destroy();
-}
+SimulateKeypress::~SimulateKeypress() { destroy(); }
 
-SimulateKeypress& SimulateKeypress::operator=(const SimulateKeypress& other) {
+SimulateKeypress &SimulateKeypress::operator=(const SimulateKeypress &other) {
     if (this == &other) {
         return *this;
     }
@@ -64,8 +65,8 @@ SimulateKeypress& SimulateKeypress::operator=(const SimulateKeypress& other) {
     }
     return *this;
 }
-/*
-SimulateKeypress& SimulateKeypress::operator=(SimulateKeypress&& other) {
+
+SimulateKeypress &SimulateKeypress::operator=(SimulateKeypress &&other) {
     keycode = other.keycode;
     _down = other._down;
     other._down = nullptr;
@@ -73,7 +74,7 @@ SimulateKeypress& SimulateKeypress::operator=(SimulateKeypress&& other) {
     other._up = nullptr;
     return *this;
 }
-*/
+
 void SimulateKeypress::operator()() const {
     if (_down == nullptr || _up == nullptr)
         return;

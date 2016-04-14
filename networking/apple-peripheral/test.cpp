@@ -12,11 +12,10 @@ using namespace keycodes;
 int main() {
     const char *name = "test-app";
     const std::array<toe::Button, 5> buttons = {
-        toe::Button{0,  33, 33, 33, "Left"},
-        toe::Button{66, 33, 33, 33, "Right"},
-        toe::Button{33, 0,  33, 33, "Up"},
+        toe::Button{0, 33, 33, 33, "Left"},
+        toe::Button{66, 33, 33, 33, "Right"}, toe::Button{33, 0, 33, 33, "Up"},
         toe::Button{33, 66, 33, 33, "Down"},
-        toe::Button{80, 0,  20, 20, "New Game"}};
+        toe::Button{80, 0, 20, 20, "New Game"}};
     const std::array<SimulateKeypress, 5> funcs = {
         SimulateKeypress{kVK_LeftArrow}, SimulateKeypress{kVK_RightArrow},
         SimulateKeypress{kVK_UpArrow}, SimulateKeypress{kVK_DownArrow},
