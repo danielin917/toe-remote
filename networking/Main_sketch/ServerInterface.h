@@ -29,8 +29,8 @@ class Button
     char *text;
     char *image;
 
-    Button(unsigned char _x, unsigned char _y, unsigned char _width,
-           unsigned char _height, const char *_text)
+    explicit Button(unsigned char _x, unsigned char _y, unsigned char _width,
+                    unsigned char _height, const char *_text)
         : x(_x), y(_y), width(_width), height(_height), border(true),
           text(nullptr), image(nullptr)
     {
@@ -38,8 +38,8 @@ class Button
         strncpy(text, _text, 49);
     }
 
-    Button(unsigned char _x, unsigned char _y, unsigned char _width,
-           unsigned char _height, const char *_text, bool _border)
+    explicit Button(unsigned char _x, unsigned char _y, unsigned char _width,
+                    unsigned char _height, const char *_text, bool _border)
         : x(_x), y(_y), width(_width), height(_height), border(_border),
           text(nullptr), image(nullptr)
     {
@@ -47,9 +47,9 @@ class Button
         strncpy(text, _text, 49);
     }
 
-    Button(unsigned char _x, unsigned char _y, unsigned char _width,
-           unsigned char _height, const char *_text, bool _border,
-           const char *_image)
+    explicit Button(unsigned char _x, unsigned char _y, unsigned char _width,
+                    unsigned char _height, const char *_text, bool _border,
+                    const char *_image)
         : x(_x), y(_y), width(_width), height(_height), border(_border),
           text(nullptr), image(nullptr)
     {
@@ -60,6 +60,15 @@ class Button
             image = new char[256];
             strncpy(image, _image, 255);
         }
+    }
+
+    Button(const Button &rhs) = delete;
+    Button(Button &&rhs)
+        : x(rhs.x), y(rhs.y), width(rhs.width), height(rhs.height),
+          border(rhs.border), text(rhs.text), image(rhs.image)
+    {
+        rhs.text = nullptr;
+        rhs.image = nullptr;
     }
 
     ~Button()

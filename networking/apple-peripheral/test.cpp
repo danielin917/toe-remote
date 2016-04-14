@@ -27,7 +27,8 @@ int main() {
     for (unsigned i = 0; i < buttons.size(); ++i) {
         const auto &button = buttons[i];
         server.create_button(button.x, button.y, button.width, button.height,
-                             button.text, funcs[i]);
+                             button.text, button.border, button.image,
+                             funcs[i]);
     }
     server.start_server();
     while (true) {
