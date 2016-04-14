@@ -11,7 +11,7 @@ using namespace keycodes;
 
 int main() {
     const char *name = "test-app";
-    const std::array<toe::Button, 5> buttons = {
+    std::array<toe::Button, 5> buttons = {
         toe::Button{0, 33, 33, 33, "Left", true, nullptr},
         toe::Button{66, 33, 33, 33, "Right", true, nullptr},
         toe::Button{33, 0, 33, 33, "Up", true, nullptr},
@@ -25,10 +25,8 @@ int main() {
     toe::ServerInterface<SimulateKeypress> server;
     server.set_device_name(name);
     for (unsigned i = 0; i < buttons.size(); ++i) {
-        const auto &button = buttons[i];
-        server.create_button(button.x, button.y, button.width, button.height,
-                             button.text, button.border, button.image,
-                             funcs[i]);
+        auto &&button = buttons[i];
+        server.add_button(std::move(button), funcs[i]);
     }
     server.start_server();
     while (true) {

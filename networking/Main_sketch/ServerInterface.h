@@ -110,8 +110,7 @@ class ServerInterface
      *Create and store new button
      *RETURNS: Button id for function on success, -1 on failure
      */
-    int create_button(unsigned char x, unsigned char y, unsigned char width,
-                      unsigned char height, char *text, Callable func);
+    int add_button(Button btn, Callable func);
     /*
      *Sets the broadcast name for your device. Name can only be 10
      *characters
@@ -157,21 +156,18 @@ ServerInterface<Callable>::~ServerInterface()
 }
 
 template <typename Callable>
-int ServerInterface<Callable>::create_button(unsigned char x, unsigned char y,
-                                             unsigned char width,
-                                             unsigned char height, char *text,
-                                             Callable func)
+int ServerInterface<Callable>::add_button(Button btn, Callable func)
 {
     if (btn_vec.size() == 16)
     {
         /*more than 16 buttons not currently supported*/
         return -1;
     }
-    Button *btn = new Button(x, y, width, height, text);
-    btn_vec.push_back(btn);
+    Button *button = new Button{static_cast<Button &&>(btn)};
+    btn_vec.push_back(button);
     function_map.push_back(func);
-    btn->id = Button::next_id++;
-    return btn->id;
+    button->id = Button::next_id++;
+    return button->id;
 }
 
 template <typename Callable>
